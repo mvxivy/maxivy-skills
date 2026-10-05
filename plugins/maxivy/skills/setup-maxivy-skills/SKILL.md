@@ -1,6 +1,6 @@
 ---
 name: "setup-maxivy-skills"
-description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language, the project's dev/stage/prod branches with every merge into them left to the Engineer. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
+description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
 disable-model-invocation: true
 ---
 
@@ -11,12 +11,19 @@ This skill is invoked manually (for example, with `/maxivy:setup-maxivy-skills`)
 ## What to do
 
 1. Determine the project root (the current working directory, or the root of the git repository if there is one).
-2. Find the project's long-lived branches (see "Finding the branches" below).
+2. Ask whether this project works through the branch flow (see "Choosing the branch flow" below); on yes, find its long-lived branches (see "Finding the branches" below).
 3. Check whether a `CLAUDE.md` file exists there.
 4. If the file does not exist, create it with an `## Engineer's Rules` section (see below).
-5. If the file already exists, read it in full and add the missing rules to the existing file without overwriting the rest of its content. If an `## Engineer's Rules` section (or an equivalent section in another language, such as `## Правила Инженера`) already exists, add the missing items to it instead of creating a duplicate section. Replace an existing `### Branches` subsection with the freshly filled one.
+5. If the file already exists, read it in full and add the missing rules to the existing file without overwriting the rest of its content. If an `## Engineer's Rules` section (or an equivalent section in another language, such as `## Правила Инженера`) already exists, add the missing items to it instead of creating a duplicate section. Replace an existing `### Branches` subsection with the freshly filled one, or remove it when the Engineer chose to work without the branch flow.
 6. Do not `git commit` this change yourself — only edit the file. The Engineer makes the commit themselves if needed (unless they explicitly ask you to commit).
-7. Briefly confirm in the chat what was added and where (without restating the file's content), naming the branch found for each stand.
+7. Briefly confirm in the chat what was added and where (without restating the file's content), naming the branch flow choice and, with the flow, the branch found for each stand.
+
+## Choosing the branch flow
+
+The **branch flow** is feature branches, a merge request (pull request) for every change, and merges left to the Engineer. It pays off in team projects and projects with stands; in a simple project it is overhead. Ask with the AskUserQuestion tool, one question, `Вести работу через ветки фич и MR?`, with two options:
+
+- `Нет, коммиты в основную ветку`: the work is committed to the current branch. Skip "Finding the branches" and leave `### Branches` out of the block below.
+- `Да, ветки фич и MR`: find the branches below and write `### Branches`.
 
 ## Finding the branches
 
@@ -36,7 +43,7 @@ Done when every stand has a branch or "none". Prod always has one; with no dev s
 
 ## Rules to add
 
-Write the following block into `CLAUDE.md` (or update the equivalent section) as is, verbatim, because these phrasings are direct instructions for Claude Code, not a description for a human. Only the `{{DEV}}`, `{{STAGE}}` and `{{PROD}}` placeholders in `### Branches` change: fill them with the branches found, and drop a stand marked "none" from the first line and from the promotion chain.
+Write the following block into `CLAUDE.md` (or update the equivalent section) as is, verbatim, because these phrasings are direct instructions for Claude Code, not a description for a human. `### Branches` goes in only with the branch flow, and only its `{{DEV}}`, `{{STAGE}}` and `{{PROD}}` placeholders change: fill them with the branches found, and drop a stand marked "none" from the first line and from the promotion chain.
 
 ```markdown
 ## Engineer's Rules
