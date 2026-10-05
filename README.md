@@ -9,11 +9,14 @@ A personal Claude Code plugin marketplace with the `maxivy` plugin.
 /plugin install maxivy@maxivy-skills
 ```
 
-To pick up newly pushed commits:
+To pick up newly pushed commits, refresh the marketplace, update the plugin, then restart Claude Code:
 
 ```shell
 /plugin marketplace update maxivy-skills
+/plugin update maxivy@maxivy-skills
 ```
+
+The plugin has no `version` in `plugin.json`, so an install is pinned to a commit: a marketplace update alone, or a reinstall, keeps the old commit.
 
 ## Skills
 
