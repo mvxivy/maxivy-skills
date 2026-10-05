@@ -25,4 +25,4 @@ Show the filled section and let the Engineer edit it.
 - Append the section to `docs/agents/issue-tracker.md`, or update it in place when it already exists.
 - If the HITL label or the review label is missing on the tracker, offer to create it and create it only on a yes.
 - Leave the commit to the Engineer.
-- Finish with one line on what was written.
+- Finish by printing the project's cheat sheet: follow [cheatsheet.md](cheatsheet.md).

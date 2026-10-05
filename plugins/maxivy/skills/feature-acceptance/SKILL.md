@@ -1,7 +1,7 @@
 ---
 name: feature-acceptance
 description: "Feature acceptance, the Engineer's gate before a feature reaches the dev branch. Use to set up the acceptance convention in a repo, to prepare acceptance once every blocker of an acceptance ticket is closed, or to work through review feedback on a feature MR."
-argument-hint: "[setup | prepare | feedback] [acceptance ticket]"
+argument-hint: "[setup | prepare | feedback | help] [acceptance ticket]"
 ---
 
 # Feature acceptance
@@ -37,7 +37,7 @@ The code host is separate from the tracker (Jira tickets with GitLab code is com
 
 ## Pick the mode
 
-An explicit mode argument wins. Otherwise, in order:
+An explicit mode argument wins; `help` runs only on request. Otherwise, in order:
 
 1. No `## Feature acceptance` section in `docs/agents/issue-tracker.md` → **setup**.
 2. The feature MR has unresolved discussions whose last note is not yours, or the Engineer gave remarks in the conversation → **feedback**.
@@ -50,3 +50,4 @@ Then read and follow the mode's file:
 - setup → [setup.md](setup.md)
 - prepare → [prepare.md](prepare.md)
 - feedback → [feedback.md](feedback.md)
+- help → [cheatsheet.md](cheatsheet.md)
