@@ -1,6 +1,6 @@
 ---
 name: feature-acceptance
-description: "Feature acceptance, the Engineer's gate before a feature reaches the dev branch. Use to set up the acceptance convention in a repo, to prepare acceptance once every blocker of an acceptance ticket is closed, or to work through review feedback on a feature MR."
+description: "Feature acceptance, the Engineer's gate before a feature reaches the dev branch, in repos whose docs/agents/issue-tracker.md has a `## Feature acceptance` section. Use to prepare acceptance once every blocker of an acceptance ticket is closed, or to work through review feedback on a feature MR."
 argument-hint: "[setup | prepare | feedback | help] [acceptance ticket]"
 ---
 
@@ -24,8 +24,10 @@ The Engineer accepts each feature once, as a whole, before it reaches the dev br
 
 Read both before any mode:
 
-- The `### Branches` rules in `CLAUDE.md`: the dev branch. If they are missing, tell the Engineer to run `/maxivy:setup-maxivy-skills` and stop.
+- The `### Branches` rules in `CLAUDE.md`: the dev branch. If they are missing, the project works without the branch flow, which acceptance needs: tell the Engineer to re-run `/maxivy:setup-maxivy-skills` and choose the branch flow, then stop.
 - The `## Feature acceptance` section of `docs/agents/issue-tracker.md`: HITL label, review status, feature branch format. If `docs/agents/issue-tracker.md` is missing, tell the Engineer to run `/setup-matt-pocock-skills` and stop.
+
+Acceptance is **opt-in** per project: it is on exactly when that section exists. Without it, only an explicit `setup` proceeds; for anything else, tell the Engineer that acceptance is off in this project and `/maxivy:feature-acceptance setup` turns it on, then stop.
 
 Every tracker operation (fetch a ticket, list its blockers, comment, label, change status, create a ticket) goes through the workflow in `docs/agents/issue-tracker.md`.
 
@@ -37,11 +39,10 @@ The code host is separate from the tracker (Jira tickets with GitLab code is com
 
 ## Pick the mode
 
-An explicit mode argument wins; `help` runs only on request. Otherwise, in order:
+An explicit mode argument wins; `setup` and `help` run only on request. Otherwise:
 
-1. No `## Feature acceptance` section in `docs/agents/issue-tracker.md` → **setup**.
-2. The feature MR has unresolved discussions whose last note is not yours, or the Engineer gave remarks in the conversation → **feedback**.
-3. Otherwise → **prepare**.
+- The feature MR has unresolved discussions whose last note is not yours, or the Engineer gave remarks in the conversation → **feedback**.
+- Otherwise → **prepare**.
 
 Find the acceptance ticket (prepare and feedback): the argument; else the key in the current branch name, matched against the branch format; else ask.
 
