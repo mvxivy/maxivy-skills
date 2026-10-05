@@ -5,7 +5,7 @@ A personal Claude Code plugin marketplace with the `maxivy` plugin.
 ## Installation
 
 ```shell
-/plugin marketplace add <github-user>/maxivy-skills
+/plugin marketplace add mvxivy/maxivy-skills
 /plugin install maxivy@maxivy-skills
 ```
 
