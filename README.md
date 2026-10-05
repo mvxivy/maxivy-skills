@@ -20,6 +20,7 @@ To pick up newly pushed commits:
 | Command | What it does |
 | --- | --- |
 | `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.md` |
+| `/maxivy:feature-acceptance` | Human-in-the-loop feature acceptance: `setup` writes the convention into `docs/agents/issue-tracker.md`, `prepare` opens the feature MR with a manual-test checklist, `feedback` works through the review remarks |
 
 ## Adding a new skill
 
