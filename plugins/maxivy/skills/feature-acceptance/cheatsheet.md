@@ -2,9 +2,16 @@
 
 Print a usage guide built from this project's live configuration: the `### Branches` rules in `CLAUDE.md`, the `## Feature acceptance` section of `docs/agents/issue-tracker.md`, the tracker type, and the code host. Print it in chat only: it is rebuilt from the configuration on every call, so it never goes stale.
 
-Fill every `<…>` with this project's real value. Example keys use the project's real key prefix, taken from the tracker or from ticket references in `git log`; the "Где смотреть" line takes the run command from the project's task runner or README. Drop lines that do not apply: the stage hop when there is no stage stand; in local mode, MR lines become the acceptance ticket.
+Fill every template slot `<…>` with this project's real value:
 
-Done when the guide is printed with no `<…>` left and every value traced to one of the sources above.
+- `<project>`: the repository name from `git remote -v`; with no remote, the root directory's name.
+- Example keys and branch names: the project's real key prefix, taken from the tracker or from ticket references in `git log`, with made-up numbers and slug.
+- `<branch format>`: the format exactly as the tracker section writes it, its own `<acceptance key>`-style parts included.
+- "Где смотреть": the MR's review environment when the CI config deploys one (a GitLab `environment` on merge request pipelines, a preview deploy on pull requests); otherwise the run command from the project's task runner or README.
+
+Drop lines that do not apply: the stage hop when there is no stage stand; in local mode, MR lines become the acceptance ticket.
+
+Done when the guide is printed with every template slot filled and every value traced to one of these sources.
 
 ## Template
 
