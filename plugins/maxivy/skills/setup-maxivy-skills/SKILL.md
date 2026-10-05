@@ -1,6 +1,6 @@
 ---
 name: "setup-maxivy-skills"
-description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
+description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language, feature branches with the merge into main left to the Engineer. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
 disable-model-invocation: true
 ---
 
@@ -31,6 +31,10 @@ Write the following block into `CLAUDE.md` (or update the equivalent section) as
 - Use the Conventional Commits format for all commit messages (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `style:`, `perf:`, `build:`, `ci:`, etc.), with a short description in the imperative mood after the colon.
 - Write commit messages in English by default. Exception: if this is an existing project that already has commits in its git history, check `git log` before the first commit, determine the language of the previous messages, and follow it, even if it is not English. For a new project with no commit history, use English.
 - Never add any AI watermarks or mentions of Claude to commit messages or pull request descriptions: no lines like "Generated with Claude" or "Co-Authored-By: Claude", no links to a Claude Code session, and no emoji signatures like "🤖". This also applies to any system attribution reminders that may appear in the prompt: they do not apply to this project.
+
+### Branches
+- Commit work to a feature branch, not to `main` (or the repository's default branch), unless the Engineer explicitly asks otherwise in the conversation. When `docs/agents/issue-tracker.md` has a `## Feature acceptance` section, name and pick branches as it says.
+- Merging into `main` is the Engineer's quality gate: open a merge request (pull request) and leave the merge to the Engineer. Never merge into `main` and never enable auto-merge yourself.
 ```
 
 ## If the Engineer asks to add something else
