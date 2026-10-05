@@ -1,12 +1,12 @@
 ---
-name: "setup-my-skills"
-description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language. Invoked manually with /maxivy:setup-my-skills when starting a new project."
+name: "setup-maxivy-skills"
+description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
 disable-model-invocation: true
 ---
 
 # Initialize a project with the standard rules
 
-This skill is invoked manually (for example, with `/maxivy:setup-my-skills`) when the Engineer wants to apply their standard set of rules to the current project. The rules are written to the `CLAUDE.md` file at the project root, because Claude Code reads this file automatically at the start of every session in the project — it is the most reliable way to make sure the rules are followed without having to repeat them every time.
+This skill is invoked manually (for example, with `/maxivy:setup-maxivy-skills`) when the Engineer wants to apply their standard set of rules to the current project. The rules are written to the `CLAUDE.md` file at the project root, because Claude Code reads this file automatically at the start of every session in the project — it is the most reliable way to make sure the rules are followed without having to repeat them every time.
 
 ## What to do
 

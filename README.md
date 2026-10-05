@@ -19,7 +19,7 @@ To pick up newly pushed commits:
 
 | Command | What it does |
 | --- | --- |
-| `/maxivy:setup-my-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.md` |
+| `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.md` |
 
 ## Adding a new skill
 
