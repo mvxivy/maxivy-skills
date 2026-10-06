@@ -1,6 +1,6 @@
 # Prepare: open the round
 
-Turn a finished feature into a feature MR the Engineer can accept in one sitting. Done when the MR description follows the template below and the round is handed over.
+Turn a finished feature into a feature MR the Engineer can accept in one sitting: walk the checklist and confirm the feature matches the spec and the design. Code review is behind, ticket by ticket, or skipped by the project's choice. Done when the MR description follows the template below and the round is handed over.
 
 ## 1. Check the blockers
 
@@ -14,21 +14,24 @@ Fetch the acceptance ticket and every ticket blocking it. Every blocker must be 
 
 ## 3. Gather the material
 
-- **Spec**: linked from the acceptance ticket. Its user stories drive the checklist.
+- **Checklist**: `## Чек-лист приёмки` in the acceptance ticket.
+- **Spec**: linked from the acceptance ticket; the source of "what was done" and of the checks when the ticket has none.
 - **Every blocker**: title, acceptance criteria, comments. Collect each `Отложенные замечания ревью` comment and every note of scope dropped or deferred.
+- **Ticket review**: the `Finishing a ticket` rule of the tracker section says whether tickets closed after the Engineer's review or after the agent's own.
 - **History**: `git log <dev>..HEAD --oneline` and `git diff <dev>...HEAD --stat`.
 - **Where to look**: the MR's review environment when CI deploys one; the local run command from the project's task runner or README. The stands get the feature only after the merge.
 - **Earlier rounds**: the existing feature MR and its round notes, if any.
 
-## 4. Write the checklist
+## 4. Reconcile the checklist
 
-Write one or more checks per user story in the spec. A check is a concrete action with concrete input and an observable result: `Войти с неверным паролем → ошибка «Неверный логин или пароль», вход не выполнен`.
+Carry the ticket's checklist into the MR and reconcile it with what was built:
 
-- Cover the unhappy paths the spec names (rejections, empty states, permissions, limits) alongside the happy path.
-- A check that needs setup (a seeded user, a feature flag) states that setup inline.
-- A user story the feature leaves uncovered goes under "Что сознательно не сделано", with the reason.
+- A check the feature covers stays as it is, with its setup (a seeded user, a feature flag) stated inline.
+- A check the feature leaves uncovered moves under "Что сознательно не сделано", with the reason.
+- Behaviour the tickets added beyond the checklist gets its own check, marked `(добавлено)`.
+- An acceptance ticket with no checklist (published before the convention) gets one written now from the spec, in the shape the tracker section describes; say so in chat.
 
-Done when every user story in the spec maps to a check or to a "not done" line.
+Done when every check of the ticket is in the MR, as a check or as a "not done" line.
 
 ## 5. Open or update the MR
 
@@ -52,6 +55,8 @@ Hand over, and comment the MR link on the acceptance ticket. In chat, give the M
 Тикеты:
 - <KEY>: <title>
 
+Ревью кода: <"каждый тикет закрыт после вашего ревью" | "по правилам проекта код не ревьюился человеком">
+
 ## Где смотреть
 
 - Review-окружение: <url, or "нет">
@@ -59,12 +64,12 @@ Hand over, and comment the MR link on the acceptance ticket. In chat, give the M
 
 ## Чек-лист приёмки
 
-### <User story>
+### <Requirement>
 - [ ] <action with concrete input> → <expected result>
 
 ## Что сознательно не сделано
 
-- <user story or criterion>: <reason; follow-up ticket if one exists>
+- <check or requirement>: <reason; follow-up ticket if one exists>
 
 ## Оставленные замечания авто-ревью
 

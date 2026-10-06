@@ -6,16 +6,18 @@ argument-hint: "[setup | prepare | feedback | help] [acceptance ticket]"
 
 # Feature acceptance
 
-The Engineer accepts each feature once, as a whole, before it reaches the dev branch. Agents implement and auto-review ticket by ticket on the feature branch; this skill runs the **gate** above them.
+The Engineer accepts each feature once, as a whole, before it reaches the dev branch: they walk the checklist and confirm the feature matches the spec and the design. Code is reviewed earlier, ticket by ticket, by the Engineer or by the agent alone, as the project chose; this skill runs the **gate** above that.
 
 ## Vocabulary
 
 - **Acceptance ticket**: a ticket the Engineer works, not an agent. It carries the HITL label and is blocked by every ticket of the feature, so it frees itself when the last blocker closes.
-- **Feature**: the set of tickets blocking an acceptance ticket. There is no separate feature or epic entity.
+- **Feature**: an increment after which the application still works as a whole, with or without business value of its own. On the tracker, the set of tickets blocking an acceptance ticket; there is no separate feature or epic entity.
+- **Checklist**: the `## Чек-лист приёмки` in the acceptance ticket, written at `/to-tickets` time. Prepare carries it into the MR; the Engineer walks it.
+- **Ticket review**: the project's choice, recorded in the `Finishing a ticket` rule of the tracker section: a core project sends every ticket to the Engineer's review before it closes; a supporting or generic project closes tickets after the agent's own review.
 - **Dev branch**: the branch feature MRs target, named in the `### Branches` rules of `CLAUDE.md` (the prod branch when the project has no dev stand).
 - **Feature branch**: the branch every ticket of the feature commits to, cut from the dev branch and named after the acceptance ticket.
 - **Feature MR**: the merge request (a pull request on GitHub) from the feature branch into the dev branch. Its description is the acceptance report.
-- **Round**: one pass of prepare → the Engineer reviews → feedback. A feature takes as many rounds as it needs; each round ends in a round note on the MR, `Раунд N: …`.
+- **Round**: one pass of prepare → the Engineer walks the checklist → feedback. A feature takes as many rounds as it needs; each round ends in a round note on the MR, `Раунд N: …`.
 - **Green**: the typecheck and the full test suite pass locally, the branch is pushed, and CI passes on it.
 - **Hand over**: move the acceptance ticket to the review status, assign it to the Engineer, and post the round note on the MR.
 - **Merge gate**: the merge into the dev branch is the Engineer's click, as `### Branches` in `CLAUDE.md` says. Leave the feature MR open for them.
@@ -25,7 +27,7 @@ The Engineer accepts each feature once, as a whole, before it reaches the dev br
 Read both before any mode:
 
 - The `### Branches` rules in `CLAUDE.md`: the dev branch. If they are missing, the project works without the branch flow, which acceptance needs: tell the Engineer to re-run `/maxivy:setup-maxivy-skills` and choose the branch flow, then stop.
-- The `## Feature acceptance` section of `docs/agents/issue-tracker.md`: HITL label, review status, feature branch format. If `docs/agents/issue-tracker.md` is missing, tell the Engineer to run `/setup-matt-pocock-skills` and stop.
+- The `## Feature acceptance` section of `docs/agents/issue-tracker.md`: HITL label, review status, feature branch format, ticket review. If `docs/agents/issue-tracker.md` is missing, tell the Engineer to run `/setup-matt-pocock-skills` and stop.
 
 Acceptance is **opt-in** per project: it is on exactly when that section exists. Without it, only an explicit `setup` proceeds; for anything else, tell the Engineer that acceptance is off in this project and `/maxivy:feature-acceptance setup` turns it on, then stop.
 

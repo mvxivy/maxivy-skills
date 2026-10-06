@@ -1,6 +1,6 @@
 # Feedback: close the round
 
-Give every remark of the Engineer exactly one outcome: a **fix** on the feature branch, a new **ticket** blocking acceptance, or a **reply**. Done when every remark has its outcome and the Engineer can see it on the MR.
+Give every remark of the Engineer exactly one outcome: a **fix** on the feature branch under the acceptance ticket, or a **reply**. A fix that looks like its own increment also carries a **flag**, and becomes a ticket only on the Engineer's word. Done when every remark has its outcome and the Engineer can see it on the MR.
 
 ## 1. Collect the remarks
 
@@ -14,26 +14,28 @@ Skip threads whose last note is yours: an earlier round handled them. Number the
 
 ## 2. Triage
 
+The Engineer has the last word: the list is a proposal, and the branch, the tracker, the spec and the design change only after they approve each item.
+
 Sort each remark:
 
-- **Fix**: corrects code already on the branch and needs no new spec decision: a bug, a missed edge case, a wrong message, naming, structure. Fits in this session.
-- **Ticket**: new or changed behaviour, a spec decision, or work big enough to be its own tracer-bullet ticket.
+- **Fix**, the default: anything the Engineer wants changed in this feature: a defect, a missed edge case, a divergence from the spec or the design, a wrong message, naming, structure, stabilisation. It is done under the acceptance ticket.
 - **Reply**: a question, or a remark you disagree with. Answer with your reasoning and change nothing yet.
+- **Flag**, on top of a fix: the fix looks like its own increment: behaviour the spec does not describe, a decision the spec has to make, or more than a session of work. Mark it `похоже на отдельный инкремент` with one line of why. The Engineer chooses: still a fix, or a new ticket.
 
-Between fix and ticket, pick ticket. Present the numbered list, each remark with its category and a one-line plan, and iterate until the Engineer approves it.
+Present the numbered list, each remark with its outcome and a one-line plan, and iterate until the Engineer approves it.
 
 ## 3. Fix
 
 On the feature branch, for each fix:
 
 1. Write a test that goes red on the remark, then make it green (`/tdd`). Remarks with no observable behaviour (naming, structure, wording in code) go straight to the change.
-2. Commit, one commit per remark.
+2. Commit, one commit per remark, referencing the acceptance ticket.
 
 Then make the branch green.
 
 ## 4. Ticket
 
-Publish each ticket through the tracker workflow in `/to-tickets`' shape (what to build, acceptance criteria), labelled `ready-for-agent`, then add it as a blocker of the acceptance ticket.
+Only for a flag the Engineer turned into a ticket: publish it through the tracker workflow in `/to-tickets`' shape (what to build, acceptance criteria), labelled `ready-for-agent`, then add it as a blocker of the acceptance ticket. The spec and the design stay as they are unless the Engineer asked to change them.
 
 ## 5. Answer on the MR
 
