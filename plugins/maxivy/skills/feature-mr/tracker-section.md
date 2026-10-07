@@ -1,0 +1,7 @@
+## Feature MR
+
+A **feature** is the set of tickets `/to-tickets` publishes from one spec; it may carry no business value of its own and is as many tickets as the Engineer finds convenient. Its tickets commit to one feature branch and reach the dev branch through one feature MR, opened with `/maxivy:feature-mr` and merged by the Engineer. The merge is the only gate: each ticket is checked against its own acceptance criteria, and nothing is re-checked at feature scale.
+
+- **Feature branch.** `{{BRANCH_FORMAT}}`, cut from the dev branch (see `### Branches` in `CLAUDE.md`). `/to-tickets` names it when publishing and writes `Ветка: <feature branch>` into every ticket's body: the feature's tickets are the ones naming its branch. Before implementing a ticket, check out its feature branch; when it does not exist yet, create it and push it. `/implement` commits there.
+- **Finishing a ticket.** After `/implement` commits, show the `/code-review` findings left unfixed in the session. When the Engineer moves on to closing the ticket without them, record them as a comment on the ticket headed `Отложенные замечания ревью`, one line each with the reason; `/maxivy:feature-mr open` gathers them into the MR as a checkbox block, and what the Engineer leaves unchecked there stays on them. Then {{TICKET_REVIEW}}. When the ticket you closed was the feature's last open one, run `/maxivy:feature-mr open <feature branch>`.
+- **Review status.** {{REVIEW_STATUS}}. A ticket sits there, assigned to {{ENGINEER}}, while the Engineer reviews its commits.

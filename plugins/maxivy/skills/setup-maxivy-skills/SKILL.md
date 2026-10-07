@@ -58,7 +58,7 @@ Write the following block into `CLAUDE.md` (or update the equivalent section) as
 
 ### Branches
 - Long-lived branches: dev stand ← `{{DEV}}`, stage stand ← `{{STAGE}}`, prod ← `{{PROD}}`.
-- Cut every feature branch from `{{DEV}}`, commit work to it, and open its merge request (pull request) into `{{DEV}}`. When `docs/agents/issue-tracker.md` has a `## Feature acceptance` section, name feature branches as it says. Commit straight to a long-lived branch only when the Engineer explicitly asks in the conversation.
+- Cut every feature branch from `{{DEV}}`, commit work to it, and open its merge request (pull request) into `{{DEV}}`. When `docs/agents/issue-tracker.md` has a `## Feature MR` section, name feature branches as it says. Commit straight to a long-lived branch only when the Engineer explicitly asks in the conversation.
 - Every merge into a long-lived branch, including the promotion `{{DEV}}` → `{{STAGE}}` → `{{PROD}}`, is the Engineer's quality gate: leave it to the Engineer. Never merge into a long-lived branch and never enable auto-merge yourself.
 ```
 
