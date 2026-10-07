@@ -1,6 +1,6 @@
 # Prepare: open the round
 
-Turn a finished feature into a feature MR the Engineer can accept in one sitting: walk the checklist and confirm the feature matches the spec and the design. Code review is behind, ticket by ticket, or skipped by the project's choice. Done when the MR description follows the template below and the round is handed over.
+Turn a finished feature into a feature MR the Engineer can accept in one sitting: walk the checklist and confirm the feature matches the spec and the design. Code review is behind, ticket by ticket, or skipped by the project's choice. Done when the MR description follows the template below, the round is handed over, and the tracker carries nothing beyond the footprint.
 
 ## 1. Check the blockers
 
@@ -14,24 +14,23 @@ Fetch the acceptance ticket and every ticket blocking it. Every blocker must be 
 
 ## 3. Gather the material
 
-- **Checklist**: `## Чек-лист приёмки` in the acceptance ticket.
-- **Spec**: linked from the acceptance ticket; the source of "what was done" and of the checks when the ticket has none.
-- **Every blocker**: title, acceptance criteria, comments. Collect each `Отложенные замечания ревью` comment and every note of scope dropped or deferred.
+- **Spec**: linked from the acceptance ticket; the source of "what was done" and of the checklist. With no spec, the bug or the plan the tickets came from.
+- **Every blocker**: title, acceptance criteria, comments. Collect each `Отложенные замечания ревью` comment, every finding of it, and every note of scope dropped or deferred.
 - **Ticket review**: the `Finishing a ticket` rule of the tracker section says whether tickets closed after the Engineer's review or after the agent's own.
 - **History**: `git log <dev>..HEAD --oneline` and `git diff <dev>...HEAD --stat`.
 - **Where to look**: the MR's review environment when CI deploys one; the local run command from the project's task runner or README. The stands get the feature only after the merge.
-- **Earlier rounds**: the existing feature MR and its round notes, if any.
+- **Earlier rounds**: the existing feature MR, its description and its round notes, if any.
 
-## 4. Reconcile the checklist
+## 4. Write the checklist
 
-Carry the ticket's checklist into the MR and reconcile it with what was built:
+One or more checks per requirement of the spec, each a concrete action with concrete input and an observable result, unhappy paths included, in the spec's language: `Войти с неверным паролем → ошибка «Неверный логин или пароль», вход не выполнен`. State the setup inline (a seeded user, a feature flag).
 
-- A check the feature covers stays as it is, with its setup (a seeded user, a feature flag) stated inline.
-- A check the feature leaves uncovered moves under "Что сознательно не сделано", with the reason.
-- Behaviour the tickets added beyond the checklist gets its own check, marked `(добавлено)`.
-- An acceptance ticket with no checklist (published before the convention) gets one written now from the spec, in the shape the tracker section describes; say so in chat.
+- A requirement the feature leaves uncovered goes under "Что сознательно не сделано", with the reason.
+- Behaviour the tickets added beyond the spec gets its own check, marked `(добавлено)`.
+- A later round starts from the previous description: checks that passed stay, checks that failed are rewritten for the fix, checks for the round's fixes are marked `(раунд N)`.
+- An acceptance ticket whose body carries a checklist from the old convention is input, like the spec; its body stays as it is.
 
-Done when every check of the ticket is in the MR, as a check or as a "not done" line.
+Done when every requirement of the spec is in the MR, as a check or as a "not done" line, and every deferred review finding is a checkbox under `## Отложенные замечания ревью`: the Engineer ticks what they looked at, and an unticked finding goes into the dev branch on their responsibility.
 
 ## 5. Open or update the MR
 
@@ -39,11 +38,11 @@ Source: the feature branch. Target: the dev branch. Title: `<acceptance key>: <f
 
 - **First round**: `glab mr create --source-branch <branch> --target-branch <dev> --title … --description …`, or `gh pr create --head <branch> --base <dev> --title … --body …`, with the Engineer as reviewer. Round note: `Раунд 1: готово к приёмке`.
 - **Later round**: replace the description with a fresh one. Round note: `Раунд N: готово к повторной приёмке`, listing what changed since the previous round (commits, tickets closed, threads answered).
-- **Local mode**: write the report into the acceptance ticket under `## Приёмка, раунд N`, with the branch name and the merge command.
+- **Local mode**: write the report into `.scratch/<feature>/acceptance.md` on the feature branch under `## Раунд N`, with the branch name and the merge command, and commit it.
 
 ## 6. Hand over
 
-Hand over, and comment the MR link on the acceptance ticket. In chat, give the MR link and one line: tickets, checks, deferred review findings.
+Hand over. In the first round, comment the bare MR link on the acceptance ticket. In chat, give the MR link and one line: tickets, checks, deferred review findings.
 
 ## MR description template
 
@@ -71,9 +70,11 @@ Hand over, and comment the MR link on the acceptance ticket. In chat, give the M
 
 - <check or requirement>: <reason; follow-up ticket if one exists>
 
-## Оставленные замечания авто-ревью
+## Отложенные замечания ревью
 
-- <KEY>: <finding>: <why it was left>
+- [ ] <KEY>: <finding> — <why it was left>
+
+Что не отмечено, остаётся на ответственности принимающего.
 ```
 
 Write "нет" under an empty section rather than dropping it: an empty section tells the Engineer it was checked.

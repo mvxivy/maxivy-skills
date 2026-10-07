@@ -6,9 +6,9 @@ Give every remark of the Engineer exactly one outcome: a **fix** on the feature 
 
 - **GitLab**: `glab api projects/:id/merge_requests/<iid>/discussions`; keep the unresolved ones (a diff note carries its file and line).
 - **GitHub**: `gh api repos/{owner}/{repo}/pulls/<n>/comments` for line comments, `gh pr view <n> --comments` for general ones.
-- **Checklist**: items the Engineer marked as failed or commented on.
+- **Checklist**: items the Engineer marked as failed or commented on in the MR description.
 - **Conversation**: remarks the Engineer gave in chat.
-- **Local mode**: the acceptance ticket's `## Comments` and the conversation.
+- **Local mode**: remarks the Engineer wrote into `.scratch/<feature>/acceptance.md` and the conversation.
 
 Skip threads whose last note is yours: an earlier round handled them. Number the rest.
 
@@ -39,11 +39,11 @@ Only for a flag the Engineer turned into a ticket: publish it through the tracke
 
 ## 5. Answer on the MR
 
-Reply in each remark's thread: a fix gets the commit SHA and the test name, a ticket gets its link, a reply gets the answer. The Engineer resolves threads: resolution is their check.
+Reply in each remark's thread: a fix gets the commit SHA and the test name, a ticket gets its link, a reply gets the answer. The Engineer resolves threads: resolution is their check. In local mode, the answer goes under the remark in `.scratch/<feature>/acceptance.md`.
 
 ## 6. Close the round
 
 - **Only fixes and replies**: hand over with the round note `Раунд N: правки внесены` and the list.
 - **Any ticket created**: post the round note `Раунд N: заведены тикеты` with their links, and move the acceptance ticket out of the review status, since it is blocked again. When the new tickets close, prepare runs again.
 
-In chat, report the count per outcome and the links.
+The round note and the list go on the MR; the acceptance ticket only changes status. In chat, report the count per outcome and the links.
