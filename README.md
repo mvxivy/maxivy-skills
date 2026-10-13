@@ -22,7 +22,7 @@ The plugin has no `version` in `plugin.json`, so an install is pinned to a commi
 
 | Command | What it does |
 | --- | --- |
-| `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.md`; asks whether the project uses the branch flow (feature branches and MRs) and, if so, records its dev/stage/prod branches |
+| `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.md`; asks whether commit scopes carry the ticket key (`feat(PROJ-123): …`) and whether the project uses the branch flow (feature branches and MRs) and, if so, records its dev/stage/prod branches |
 | `/maxivy:feature-mr` | The feature MR: `setup` writes the convention into `docs/agents/issue-tracker.md`, `open` opens the MR of a feature branch into the dev branch with a summary and the deferred review findings, `feedback` works through the review threads on it, `help` prints the project's cheat sheet |
 
 ## Feature MR workflow

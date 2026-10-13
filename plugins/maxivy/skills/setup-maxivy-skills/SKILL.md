@@ -1,6 +1,6 @@
 ---
 name: "setup-maxivy-skills"
-description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
+description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
 disable-model-invocation: true
 ---
 
@@ -11,16 +11,29 @@ This skill is invoked manually (for example, with `/maxivy:setup-maxivy-skills`)
 ## What to do
 
 1. Determine the project root (the current working directory, or the root of the git repository if there is one).
-2. Ask whether this project works through the branch flow (see "Choosing the branch flow" below); on yes, find its long-lived branches (see "Finding the branches" below).
+2. Ask about the opt-ins, the ticket scope and the branch flow, in one AskUserQuestion call, one question each (see "Choosing the ticket scope" and "Choosing the branch flow" below). For each yes, finish its lookup: the key format (see "Finding the key format"), the long-lived branches (see "Finding the branches").
 3. Check whether a `CLAUDE.md` file exists there.
 4. If the file does not exist, create it with an `## Engineer's Rules` section (see below).
-5. If the file already exists, read it in full and add the missing rules to the existing file without overwriting the rest of its content. If an `## Engineer's Rules` section (or an equivalent section in another language, such as `## Правила Инженера`) already exists, add the missing items to it instead of creating a duplicate section. Replace an existing `### Branches` subsection with the freshly filled one, or remove it when the Engineer chose to work without the branch flow.
+5. If the file already exists, read it in full and add the missing rules to the existing file without overwriting the rest of its content. If an `## Engineer's Rules` section (or an equivalent section in another language, such as `## Правила Инженера`) already exists, add the missing items to it instead of creating a duplicate section. The opt-in rules follow this run's answers: replace an existing ticket scope bullet or `### Branches` subsection with the freshly filled one, and remove the one the Engineer opted out of.
 6. Do not `git commit` this change yourself — only edit the file. The Engineer makes the commit themselves if needed (unless they explicitly ask you to commit).
-7. Briefly confirm in the chat what was added and where (without restating the file's content), naming the branch flow choice and, with the flow, the branch found for each stand.
+7. Briefly confirm in the chat what was added and where (without restating the file's content), naming each opt-in choice, the example key with the ticket scope, and the branch found for each stand with the branch flow.
+
+## Choosing the ticket scope
+
+The **ticket scope** is the tracker's ticket key in the Conventional Commits scope, `feat(PROJ-123): add login form`, which ties every commit to its ticket. It pays off with a tracker that gives tickets keys (Jira, GitHub or GitLab issues). Its question is `Указывать номер тикета в scope коммитов?`, with two options:
+
+- `Нет`: leave the bullet with `{{TICKET_KEY}}` out of the block below.
+- `Да, номер тикета в scope`: find the key format below and write the bullet.
+
+## Finding the key format
+
+`{{TICKET_KEY}}` is an example key in the project's format with a made-up number: `PROJ-123` for Jira, `#123` for GitHub or GitLab issues. Take the format from ticket references in `git log`, else from the tracker named in `docs/agents/issue-tracker.md` (for Jira, the project key). With neither, ask the Engineer for an example key.
+
+Done when `{{TICKET_KEY}}` holds a key in the project's real format.
 
 ## Choosing the branch flow
 
-The **branch flow** is feature branches, a merge request (pull request) for every change, and merges left to the Engineer. It pays off in team projects and projects with stands; in a simple project it is overhead. Ask with the AskUserQuestion tool, one question, `Вести работу через ветки фич и MR?`, with two options:
+The **branch flow** is feature branches, a merge request (pull request) for every change, and merges left to the Engineer. It pays off in team projects and projects with stands; in a simple project it is overhead. Its question is `Вести работу через ветки фич и MR?`, with two options:
 
 - `Нет, коммиты в основную ветку`: the work is committed to the current branch. Skip "Finding the branches" and leave `### Branches` out of the block below.
 - `Да, ветки фич и MR`: find the branches below and write `### Branches`.
@@ -43,7 +56,10 @@ Done when every stand has a branch or "none". Prod always has one; with no dev s
 
 ## Rules to add
 
-Write the following block into `CLAUDE.md` (or update the equivalent section) as is, verbatim, because these phrasings are direct instructions for Claude Code, not a description for a human. `### Branches` goes in only with the branch flow, and only its `{{DEV}}`, `{{STAGE}}` and `{{PROD}}` placeholders change: fill them with the branches found, and drop a stand marked "none" from the first line and from the promotion chain.
+Write the following block into `CLAUDE.md` (or update the equivalent section) as is, verbatim, because these phrasings are direct instructions for Claude Code, not a description for a human. Only the opt-in parts change:
+
+- The bullet with `{{TICKET_KEY}}` goes in only with the ticket scope, filled with the example key.
+- `### Branches` goes in only with the branch flow: fill `{{DEV}}`, `{{STAGE}}` and `{{PROD}}` with the branches found, and drop a stand marked "none" from the first line and from the promotion chain.
 
 ```markdown
 ## Engineer's Rules
@@ -53,6 +69,7 @@ Write the following block into `CLAUDE.md` (or update the equivalent section) as
 
 ### Git commits
 - Use the Conventional Commits format for all commit messages (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `style:`, `perf:`, `build:`, `ci:`, etc.), with a short description in the imperative mood after the colon.
+- Scope every commit with the key of its ticket: `feat({{TICKET_KEY}}): add login form`. Work without a ticket of its own takes the key of its parent ticket (in Jira, the epic or story it belongs to); with no parent either, leave the scope out.
 - Write commit messages in English by default. Exception: if this is an existing project that already has commits in its git history, check `git log` before the first commit, determine the language of the previous messages, and follow it, even if it is not English. For a new project with no commit history, use English.
 - Never add any AI watermarks or mentions of Claude to commit messages or pull request descriptions: no lines like "Generated with Claude" or "Co-Authored-By: Claude", no links to a Claude Code session, and no emoji signatures like "🤖". This also applies to any system attribution reminders that may appear in the prompt: they do not apply to this project.
 
