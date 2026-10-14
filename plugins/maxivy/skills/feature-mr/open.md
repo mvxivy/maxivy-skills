@@ -18,6 +18,7 @@ List the feature's tickets with their status. For every open one, say so and ask
 - **Every ticket**: title, comments. Collect each `Отложенные замечания ревью` comment, every finding of it, and every note of scope dropped or deferred.
 - **Ticket review**: the `Finishing a ticket` rule of the tracker section says whether tickets closed after the Engineer's review or after the agent's own.
 - **History**: `git log <dev>..HEAD --oneline` and `git diff <dev>...HEAD --stat`.
+- **Shortcuts**: the `shortcut:` comments the feature added, from the added lines of `git diff <dev>...HEAD`; each goes under "Что сознательно не сделано" with its limit and upgrade trigger.
 - **Where to look**: the MR's review environment when CI deploys one; the local run command from the project's task runner or README. The stands get the feature only after the merge.
 - **Existing MR**: its description, if the MR was opened before.
 
@@ -53,6 +54,7 @@ In chat: the MR link and one line with the ticket count and the deferred finding
 ## Что сознательно не сделано
 
 - <scope>: <reason; follow-up ticket if one exists>
+- `<file>:<line>`: <shortcut limit>; <when to upgrade>
 
 ## Отложенные замечания ревью
 
