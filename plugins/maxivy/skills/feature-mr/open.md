@@ -9,8 +9,8 @@ List the feature's tickets with their status. For every open one, say so and ask
 ## 2. Green
 
 1. Check out the feature branch and pull.
-2. If the dev branch has moved, merge it into the feature branch (this direction only); resolve conflicts with `/resolving-merge-conflicts`.
-3. Make it green. Fix mechanical fallout from the merge yourself; for anything else, report what is red and stop.
+2. Run the checks on the branch as it is; the merge into the dev branch happens when the Engineer approves the request.
+3. Make it green. Fix mechanical failures yourself; for anything else, report what is red and stop.
 
 ## 3. Material
 
