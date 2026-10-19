@@ -1,6 +1,6 @@
 ---
 name: "setup-maxivy-skills"
-description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
+description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian with development terms in English, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
 disable-model-invocation: true
 ---
 
@@ -66,6 +66,7 @@ Write the following block into `CLAUDE.md` (or update the equivalent section) as
 
 ### Language
 - Always communicate with the user in Russian only, regardless of the language of the code, code comments, or project file contents.
+- Write software development terms in English, spelled as the code and docs spell them (seam, deep module, adapter, mock, fixture): the English term alone, without a Russian translation beside it.
 
 ### Git commits
 - Use the Conventional Commits format for all commit messages (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `style:`, `perf:`, `build:`, `ci:`, etc.), with a short description in the imperative mood after the colon.

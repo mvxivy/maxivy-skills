@@ -16,6 +16,7 @@ Single-context: one `CONTEXT.md` plus `docs/adr/` at the repo root. See `docs/ag
 
 ### Language
 - Always communicate with the user in Russian only, regardless of the language of the code, code comments, or project file contents.
+- Write software development terms in English, spelled as the code and docs spell them (seam, deep module, adapter, mock, fixture): the English term alone, without a Russian translation beside it.
 
 ### Git commits
 - Use the Conventional Commits format for all commit messages (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `style:`, `perf:`, `build:`, `ci:`, etc.), with a short description in the imperative mood after the colon.
