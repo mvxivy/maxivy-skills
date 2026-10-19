@@ -1,6 +1,6 @@
 ---
 name: "setup-maxivy-skills"
-description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian with development terms in English, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
+description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian with development terms in English, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer; also adds the test seams section to the tickets convention in docs/agents/issue-tracker.md. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
 disable-model-invocation: true
 ---
 
@@ -15,8 +15,9 @@ This skill is invoked manually (for example, with `/maxivy:setup-maxivy-skills`)
 3. Check whether a `CLAUDE.md` file exists there.
 4. If the file does not exist, create it with an `## Engineer's Rules` section (see below).
 5. If the file already exists, read it in full and add the missing rules to the existing file without overwriting the rest of its content. If an `## Engineer's Rules` section (or an equivalent section in another language, such as `## Правила Инженера`) already exists, add the missing items to it instead of creating a duplicate section. The opt-in rules follow this run's answers: replace an existing ticket scope bullet or `### Branches` subsection with the freshly filled one, and remove the one the Engineer opted out of.
-6. Do not `git commit` this change yourself — only edit the file. The Engineer makes the commit themselves if needed (unless they explicitly ask you to commit).
-7. Briefly confirm in the chat what was added and where (without restating the file's content), naming each opt-in choice, the example key with the ticket scope, and the branch found for each stand with the branch flow.
+6. Add the test seams convention to `docs/agents/issue-tracker.md` (see "Tracker convention" below).
+7. Do not `git commit` this change yourself — only edit the files. The Engineer makes the commit themselves if needed (unless they explicitly ask you to commit).
+8. Briefly confirm in the chat what was added and where (without restating the files' content), naming each opt-in choice, the example key with the ticket scope, and the branch found for each stand with the branch flow.
 
 ## Choosing the ticket scope
 
@@ -80,12 +81,22 @@ Write the following block into `CLAUDE.md` (or update the equivalent section) as
 - Every merge into a long-lived branch, including the promotion `{{DEV}}` → `{{STAGE}}` → `{{PROD}}`, is the Engineer's quality gate: leave it to the Engineer. Never merge into a long-lived branch and never enable auto-merge yourself.
 ```
 
+## Tracker convention
+
+Tickets carry their **test seams**, so `/implement` and `/tdd` work at seams the Engineer already approved. The convention lives in `docs/agents/issue-tracker.md`, which `/to-tickets` and `/implement` read. Add this bullet verbatim to the file's `## Conventions` section (create the section when it is missing):
+
+```markdown
+- **Test seams** = a `Seams` section in every ticket, right after its acceptance criteria, headed in the tracker's markup (`## Seams` in Markdown, `h2. Seams` in Jira wiki markup); the heading stays `Seams` whatever the ticket's language. One line per seam: the public interface the tests go through, what it catches, what it misses. `/to-tickets` fills it from the seams agreed in `/to-spec` or the grilling and shows each ticket's seams in the breakdown the Engineer approves; `/implement` and `/tdd` take them as the pre-agreed seams.
+```
+
+When the section already has a test seams bullet, keep the project's own. When `docs/agents/issue-tracker.md` is missing, skip this and say in the confirmation that `/setup-matt-pocock-skills` creates it.
+
 ## If the Engineer asks to add something else
 
 If the Engineer names additional rules when invoking the skill (for example, about docstrings in Russian, or a ban on creating unnecessary documentation files), add them as separate items to the same `## Engineer's Rules` section, under the subsection that fits their meaning (or create a new subsection if the topic is new), keeping the same style — a direct instruction for Claude Code, not an abstract wish.
 
 ## Important
 
-- Do not create any other files (README, documentation, etc.) as part of this skill — only `CLAUDE.md`.
+- Do not create any other files (README, documentation, etc.) as part of this skill — only `CLAUDE.md`, plus the seams bullet in an existing `docs/agents/issue-tracker.md`.
 - Do not copy the skill files themselves (`~/dev/claude-skills` and the like) into the project — this skill only works with the rules in `CLAUDE.md`; the Engineer connects individual skills themselves via `.claude/skills` when needed.
 - If `CLAUDE.md` already contains a rule that contradicts one of the rules above (for example, it explicitly says to use a different commit format), ask the Engineer what to do instead of silently overwriting it.
