@@ -22,20 +22,20 @@ The plugin has no `version` in `plugin.json`, so an install is pinned to a commi
 
 | Command | What it does |
 | --- | --- |
-| `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.md`; asks whether commit scopes carry the ticket key (`feat(PROJ-123): …`) and whether the project uses the branch flow (feature branches and MRs) and, if so, records its dev/stage/prod branches; adds the `Seams` section (test seams, heading always in English) to the tickets convention in `docs/agents/issue-tracker.md` |
+| `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.local.md`; asks whether commit scopes carry the ticket key (`feat(PROJ-123): …`) and whether the project uses the branch flow (feature branches and MRs) and, if so, records its dev/stage/prod branches; adds the `Seams` section (test seams, heading always in English) to the tickets convention in `docs/agents/issue-tracker.md` |
 | `/maxivy:feature-mr` | The feature MR: `setup` writes the convention into `docs/agents/issue-tracker.md`, `open` opens the MR of a feature branch into the dev branch with a summary and the deferred review findings, `feedback` works through the review threads on it, `help` prints the project's cheat sheet |
 
 ## Feature MR workflow
 
-A feature is the set of tickets `/to-tickets` publishes from one spec; it may carry no business value of its own and is as many tickets as you find convenient. Its tickets commit to one feature branch and reach the dev branch through one MR, which you merge. The merge is the only gate: each ticket is checked against its own acceptance criteria after `/implement` (by you or by the agent alone, as the project chose), and nothing is re-checked at feature scale. The process lives in two project files, `CLAUDE.md` and `docs/agents/issue-tracker.md`, which Matt Pocock's skills already read, so `/to-tickets` and `/implement` follow it without changes to those skills.
+A feature is the set of tickets `/to-tickets` publishes from one spec; it may carry no business value of its own and is as many tickets as you find convenient. Its tickets commit to one feature branch and reach the dev branch through one MR, which you merge. The merge is the only gate: each ticket is checked against its own acceptance criteria after `/implement` (by you or by the agent alone, as the project chose), and nothing is re-checked at feature scale. The process lives in two project files, `CLAUDE.local.md` (or `CLAUDE.md`) and `docs/agents/issue-tracker.md`, which Matt Pocock's skills already read, so `/to-tickets` and `/implement` follow it without changes to those skills.
 
 ### Once per project
 
 1. `/setup-matt-pocock-skills`, if not done yet: creates `docs/agents/issue-tracker.md` (where tickets live and how to work with them).
-2. `/maxivy:setup-maxivy-skills`, answering yes to the branch flow: it finds the dev, stage and prod branches (or asks about them in a quiz) and writes the `### Branches` rule into `CLAUDE.md`: feature branches are cut from the dev branch, their MRs target it, and only the Engineer merges. Simple projects answer no and skip the flow altogether.
+2. `/maxivy:setup-maxivy-skills`, answering yes to the branch flow: it finds the dev, stage and prod branches (or asks about them in a quiz) and writes the `### Branches` rule into `CLAUDE.local.md`: feature branches are cut from the dev branch, their MRs target it, and only the Engineer merges. Simple projects answer no and skip the flow altogether.
 3. `/maxivy:feature-mr setup`, the explicit opt-in (the flow stays off in a project until you run it). It asks one question: is the project a core domain for you (every ticket passes your code review before it closes) or a supporting or generic one (tickets close after the agent's own review, the merge is the only human gate)? Then it adds a `## Feature MR` section to `docs/agents/issue-tracker.md` with the feature branch format (e.g. `feature/user-login`), the ticket review rule and, for a core project, the review status (for Jira, read from your workflow). It shows a draft first, creates a missing label on the tracker only after you confirm, and ends by printing a cheat sheet with this project's real branches, statuses and example commands. `/maxivy:feature-mr help` prints it again at any time, rebuilt from the current configuration.
 
-Commit these files yourself: the skills leave them uncommitted.
+The skills leave these files uncommitted: commit `docs/agents/issue-tracker.md` yourself if the project tracks it; `CLAUDE.local.md` stays out of git.
 
 ### Per feature
 

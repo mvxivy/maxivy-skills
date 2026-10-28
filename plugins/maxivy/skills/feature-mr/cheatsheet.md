@@ -1,6 +1,6 @@
 # Cheat sheet: this project's guide
 
-Print a usage guide built from this project's live configuration: the `### Branches` rules in `CLAUDE.md`, the `## Feature MR` section of `docs/agents/issue-tracker.md`, the tracker type, and the code host. Print it in chat only: it is rebuilt from the configuration on every call, so it never goes stale.
+Print a usage guide built from this project's live configuration: the `### Branches` rules in `CLAUDE.md` or `CLAUDE.local.md`, the `## Feature MR` section of `docs/agents/issue-tracker.md`, the tracker type, and the code host. Print it in chat only: it is rebuilt from the configuration on every call, so it never goes stale.
 
 Fill every template slot `<…>` with this project's real value:
 

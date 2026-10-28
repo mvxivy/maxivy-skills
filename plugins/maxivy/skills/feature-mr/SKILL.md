@@ -12,7 +12,7 @@ A feature's tickets commit to one feature branch and reach the dev branch throug
 
 - **Feature**: the tickets `/to-tickets` published from one spec, as many as the Engineer found convenient, with or without business value of their own. On a local tracker, the feature's directory under `.scratch/`; on a real tracker, the tickets whose body names the feature branch.
 - **Feature branch**: the branch every ticket of the feature commits to, cut from the dev branch, in the format the tracker section gives.
-- **Dev branch**: the branch feature MRs target, named in the `### Branches` rules of `CLAUDE.md` (the prod branch when the project has no dev stand).
+- **Dev branch**: the branch feature MRs target, named in the `### Branches` rules of `CLAUDE.md` or `CLAUDE.local.md` (the prod branch when the project has no dev stand).
 - **Feature MR**: the merge request (a pull request on GitHub) from the feature branch into the dev branch. Its description sums the feature up for the Engineer; its threads carry their remarks and your answers.
 - **Deferred findings**: the `Отложенные замечания ревью` comments `/implement` left on the feature's tickets. The MR gathers them into one checkbox block; what the Engineer leaves unticked goes into the dev branch on their responsibility.
 - **Green**: the typecheck and the full test suite pass locally, the branch is pushed, and CI passes on it.
@@ -22,7 +22,7 @@ A feature's tickets commit to one feature branch and reach the dev branch throug
 
 Read both before any mode:
 
-- The `### Branches` rules in `CLAUDE.md`: the dev branch. If they are missing, the project works without the branch flow, which this skill needs: tell the Engineer to re-run `/maxivy:setup-maxivy-skills` and choose the branch flow, then stop.
+- The `### Branches` rules in `CLAUDE.md` or `CLAUDE.local.md`: the dev branch. If they are missing, the project works without the branch flow, which this skill needs: tell the Engineer to re-run `/maxivy:setup-maxivy-skills` and choose the branch flow, then stop.
 - The `## Feature MR` section of `docs/agents/issue-tracker.md`: feature branch format, ticket review, review status. If `docs/agents/issue-tracker.md` is missing, tell the Engineer to run `/setup-matt-pocock-skills` and stop.
 
 The flow is **opt-in** per project: it is on exactly when that section exists. Without it, only an explicit `setup` proceeds; for anything else, tell the Engineer that the feature MR flow is off in this project and `/maxivy:feature-mr setup` turns it on, then stop.

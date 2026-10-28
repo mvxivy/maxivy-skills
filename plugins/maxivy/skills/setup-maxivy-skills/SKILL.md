@@ -1,19 +1,19 @@
 ---
 name: "setup-maxivy-skills"
-description: "Initializes or extends CLAUDE.md in the current project with the Engineer's standard rules: communicate only in Russian with development terms in English, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer; also adds the test seams section to the tickets convention in docs/agents/issue-tracker.md. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
+description: "Initializes or extends CLAUDE.local.md in the current project with the Engineer's standard rules: communicate only in Russian with development terms in English, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer; also adds the test seams section to the tickets convention in docs/agents/issue-tracker.md. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
 disable-model-invocation: true
 ---
 
 # Initialize a project with the standard rules
 
-This skill is invoked manually (for example, with `/maxivy:setup-maxivy-skills`) when the Engineer wants to apply their standard set of rules to the current project. The rules are written to the `CLAUDE.md` file at the project root, because Claude Code reads this file automatically at the start of every session in the project — it is the most reliable way to make sure the rules are followed without having to repeat them every time.
+This skill is invoked manually (for example, with `/maxivy:setup-maxivy-skills`) when the Engineer wants to apply their standard set of rules to the current project. The rules are written to the `CLAUDE.local.md` file at the project root: Claude Code reads it automatically at the start of every session in the project, after `CLAUDE.md`, and it stays out of git. The rules are the Engineer's own, while the project's `CLAUDE.md` belongs to the team; never write them there.
 
 ## What to do
 
 1. Determine the project root (the current working directory, or the root of the git repository if there is one).
 2. Ask about the opt-ins, the ticket scope and the branch flow, in one AskUserQuestion call, one question each (see "Choosing the ticket scope" and "Choosing the branch flow" below). For each yes, finish its lookup: the key format (see "Finding the key format"), the long-lived branches (see "Finding the branches").
-3. Check whether a `CLAUDE.md` file exists there.
-4. If the file does not exist, create it with an `## Engineer's Rules` section (see below).
+3. Check whether a `CLAUDE.local.md` file exists there.
+4. If the file does not exist, create it with an `## Engineer's Rules` section (see below). When the repo tracks an `AGENTS.md`, start the new file with the line `@AGENTS.md`: a `CLAUDE.local.md` otherwise stops Claude Code from reading `AGENTS.md`. When `git check-ignore -q CLAUDE.local.md` fails, add `CLAUDE.local.md` to `.git/info/exclude`, never to `.gitignore`.
 5. If the file already exists, read it in full and add the missing rules to the existing file without overwriting the rest of its content. If an `## Engineer's Rules` section (or an equivalent section in another language, such as `## Правила Инженера`) already exists, add the missing items to it instead of creating a duplicate section. The opt-in rules follow this run's answers: replace an existing ticket scope bullet or `### Branches` subsection with the freshly filled one, and remove the one the Engineer opted out of.
 6. Add the test seams convention to `docs/agents/issue-tracker.md` (see "Tracker convention" below).
 7. Do not `git commit` this change yourself — only edit the files. The Engineer makes the commit themselves if needed (unless they explicitly ask you to commit).
@@ -57,7 +57,7 @@ Done when every stand has a branch or "none". Prod always has one; with no dev s
 
 ## Rules to add
 
-Write the following block into `CLAUDE.md` (or update the equivalent section) as is, verbatim, because these phrasings are direct instructions for Claude Code, not a description for a human. Only the opt-in parts change:
+Write the following block into `CLAUDE.local.md` (or update the equivalent section) as is, verbatim, because these phrasings are direct instructions for Claude Code, not a description for a human. Only the opt-in parts change:
 
 - The bullet with `{{TICKET_KEY}}` goes in only with the ticket scope, filled with the example key.
 - `### Branches` goes in only with the branch flow: fill `{{DEV}}`, `{{STAGE}}` and `{{PROD}}` with the branches found, and drop a stand marked "none" from the first line and from the promotion chain.
@@ -97,6 +97,6 @@ If the Engineer names additional rules when invoking the skill (for example, abo
 
 ## Important
 
-- Do not create any other files (README, documentation, etc.) as part of this skill — only `CLAUDE.md`, plus the seams bullet in an existing `docs/agents/issue-tracker.md`.
-- Do not copy the skill files themselves (`~/dev/claude-skills` and the like) into the project — this skill only works with the rules in `CLAUDE.md`; the Engineer connects individual skills themselves via `.claude/skills` when needed.
-- If `CLAUDE.md` already contains a rule that contradicts one of the rules above (for example, it explicitly says to use a different commit format), ask the Engineer what to do instead of silently overwriting it.
+- Do not create any other files (README, documentation, etc.) as part of this skill — only `CLAUDE.local.md`, plus the seams bullet in an existing `docs/agents/issue-tracker.md`.
+- Do not copy the skill files themselves (`~/dev/claude-skills` and the like) into the project — this skill only works with the rules in `CLAUDE.local.md`; the Engineer connects individual skills themselves via `.claude/skills` when needed.
+- If `CLAUDE.local.md` or the team's `CLAUDE.md` already contains a rule that contradicts one of the rules above (for example, it explicitly says to use a different commit format), ask the Engineer what to do instead of silently overwriting it.
