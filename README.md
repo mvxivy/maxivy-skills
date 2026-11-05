@@ -24,6 +24,7 @@ The plugin has no `version` in `plugin.json`, so an install is pinned to a commi
 | --- | --- |
 | `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.local.md`; asks whether commit scopes carry the ticket key (`feat(PROJ-123): …`) and whether the project uses the branch flow (feature branches and MRs) and, if so, records its dev/stage/prod branches; adds the `Seams` section (test seams, heading always in English) to the tickets convention in `docs/agents/issue-tracker.md` |
 | `/maxivy:feature-mr` | The feature MR: `setup` writes the convention into `docs/agents/issue-tracker.md`, `open` opens the MR of a feature branch into the dev branch with a summary and the deferred review findings, `feedback` works through the review threads on it, `help` prints the project's cheat sheet |
+| `/maxivy:afk-session` | Builds a feature's open tickets one after another while you are away: the `/implement` flow per ticket in clean-context subagents, ambiguities decided by the test's reading and logged, manual checks run in the browser against the local backend and frontend; ends with `/maxivy:feature-mr open` and an «AFK: проверить» block in the MR listing every decision, check and skipped ticket to re-check |
 
 ## Feature MR workflow
 
@@ -50,6 +51,8 @@ The skills leave these files uncommitted: commit `docs/agents/issue-tracker.md` 
 5. **Your read.** Read the MR; remarks are comments on it, or in chat.
 6. `/maxivy:feature-mr feedback`: the agent collects open threads and shows a numbered list for you to approve. Every remark is a fix by default, each with a test and its own commit; a question gets a reply. A remark that looks like a separate increment is only flagged as such: it becomes a ticket, or a change to the spec, solely on your word. The agent replies in every thread with a commit, a ticket link or an answer; you resolve the threads.
 7. **Done:** merge into the dev branch and check the feature on the dev stand. A defect found after the merge is a bug ticket. Promotion dev → stage → prod is yours too.
+
+**AFK variant.** Steps 3–4 can run unattended: `/maxivy:afk-session <Story or feature branch>` builds the open tickets in `Blocks` order, never stops after its preflight, and opens the MR with an «AFK: проверить» block: the questions it decided for you, the manual checks with screenshots, the tickets it could not finish (their work sits in `afk/<KEY>-wip`). Keep the machine awake (`caffeinate -i`) and the session open.
 
 Without a mode argument the skill picks one itself: unanswered threads of yours on the MR → `feedback`; otherwise `open`. In a project without the `## Feature MR` section it only says that the flow is off. It takes the feature from the argument or from the current branch name.
 
