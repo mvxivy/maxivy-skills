@@ -1,6 +1,6 @@
 # Astra as the builder
 
-The session runs with `astra`: the test, implementer and fix subagents of steps 2.3, 2.5 and 2.7 are Astra runs (OpenAI `gpt-6-astra` through Codex) instead of Claude subagents. Seams, every decision, the ledger, `/code-review`, manual checks, the tracker and the MR stay yours.
+The session runs with `astra`: the test, implementer and fix subagents of steps 2.3, 2.5 and 2.7 are Astra runs (OpenAI `gpt-6-astra` through Codex) instead of Claude subagents. Seams, every decision and ADR, the ledger, `/code-review`, manual checks, the tracker and the MR stay yours.
 
 ## The sandbox is the guard
 
