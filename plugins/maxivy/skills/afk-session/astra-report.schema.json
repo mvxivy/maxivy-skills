@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["status", "summary", "commit_message", "changed_files", "checks", "ambiguities", "invalidated_fixtures", "blocker"],
+  "properties": {
+    "status": { "type": "string", "enum": ["done", "blocked"] },
+    "summary": { "type": "string" },
+    "commit_message": { "type": "string" },
+    "changed_files": { "type": "array", "items": { "type": "string" } },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["command", "result", "note"],
+        "properties": {
+          "command": { "type": "string" },
+          "result": { "type": "string", "enum": ["passed", "failed", "not_run"] },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "ambiguities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["question", "readings", "taken"],
+        "properties": {
+          "question": { "type": "string" },
+          "readings": { "type": "array", "items": { "type": "string" } },
+          "taken": { "type": "string" }
+        }
+      }
+    },
+    "invalidated_fixtures": { "type": "array", "items": { "type": "string" } },
+    "blocker": { "type": "string" }
+  }
+}

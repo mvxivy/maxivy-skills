@@ -1,0 +1,15 @@
+#!/bin/sh
+# astra <brief.md>: one Astra (gpt-6-astra via Codex) run in the current repo; prints its JSON report.
+set -eu
+brief=${1:?usage: astra <brief.md>}
+[ -f "$brief" ] || { echo "astra: no brief at $brief" >&2; exit 2; }
+root=$(cd "$(dirname "$0")/.." && pwd)
+base=${brief%.md}
+# The sandbox is the push guard: workspace-write keeps .git read-only and the network off;
+# --ignore-user-config drops the MCP servers (browser, computer use) that run outside it.
+codex exec -m gpt-6-astra -s workspace-write --ephemeral --ignore-user-config --ignore-rules \
+  -C "$(git rev-parse --show-toplevel)" \
+  --output-schema "$root/skills/afk-session/astra-report.schema.json" \
+  -o "$base.report.json" - < "$brief" > "$base.log" 2>&1 \
+  || { echo "astra: codex failed, see $base.log" >&2; tail -20 "$base.log" >&2; exit 1; }
+cat "$base.report.json"
