@@ -9,7 +9,7 @@ disable-model-invocation: true
 
 The Engineer launched this and walked away. Build every open ticket of one feature on its feature branch, in the order its `Blocks` links allow, and leave a feature MR they can review in one sitting. The Engineer is AFK: each question you would have asked becomes a decision you take, apply and write into its ticket. What they should re-check goes to the **ledger**, which becomes the «AFK: проверить» block of the MR.
 
-You are the orchestrator. Each ticket is built by subagents with a clean context, so your own window holds only the ledger and short reports. With `astra` in the argument, the test, implementer and fix subagents are Astra runs: each one goes as [astra.md](astra.md) says.
+You are the orchestrator. Each ticket is built by subagents with a clean context, so your own window holds only the ledger and short reports. Pass each subagent the current fetched ticket/spec and the verified runtime setup (database, test command, permission constraints); it need not repeat unchanged access probes or refetch the same evidence. With `astra` in the argument, the test, implementer and fix subagents are Astra runs: each one goes as [astra.md](astra.md) says.
 
 ## Project conventions
 
@@ -30,7 +30,7 @@ This is the only step that may stop the session.
 3. Check tracker access with one ticket fetch. With `astra`: `codex login status` reports a login.
 4. Create the ledger at `.git/afk/<feature branch with / replaced by ->.md` from the template in step 4. When it already exists, this is a resumed session: continue from the tickets it does not mark done or skipped.
 
-Red checks on the untouched branch, no tracker access, or no test database: report it and stop. Otherwise print the ordered ticket list, say the session runs to the end without questions, and start.
+Use the repo’s documented blocking/advisory classification. A pre-existing lint/knip failure explicitly marked non-blocking by the repo or accepted by the Engineer is baseline: log it, continue without another approval, and add no new findings in changed files. A failed blocking check, unavailable tracker, or missing test database stops preflight. Otherwise print the ordered ticket list, say the session runs to the end without questions, and start. Runtime permission prompts are handled by the host’s configured approval policy; this skill does not grant sandbox access.
 
 ## 2. Each ticket
 
@@ -45,7 +45,7 @@ Take the next ticket from the frontier. Record its starting commit as the **base
 7. **Review.** `/code-review` since the base. A fix subagent (with `astra`, an Astra run) applies every finding inside the ticket's scope, in its own commits; each finding left unfixed goes into the ticket's `Отложенные замечания ревью` comment with its reason, as the `## Feature MR` section describes.
 8. **Finish.** As the tracker section says for a finished ticket. Mark it done in the ledger with its commits.
 
-Done with a ticket when its step 3 tests were red before step 5 and are green after it, the repo's checks pass on the branch, and the ledger has its line.
+Done with a ticket when its step 3 tests were red before step 5 and are green after it, the repo's blocking checks pass on the branch and its accepted advisory baseline has not worsened in changed files, and the ledger has its line.
 
 ### A ticket that does not get done
 
