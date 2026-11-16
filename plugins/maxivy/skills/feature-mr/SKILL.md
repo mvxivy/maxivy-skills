@@ -16,7 +16,7 @@ A feature's tickets commit to one feature branch and reach the dev branch throug
 - **Feature MR**: the merge request (a pull request on GitHub) from the feature branch into the dev branch. Its description sums the feature up for the Engineer; its threads carry their remarks and your answers.
 - **Deferred findings**: the `Отложенные замечания ревью` comments `/implement` left on the feature's tickets. The MR gathers them into one checkbox block; what the Engineer leaves unticked goes into the dev branch on their responsibility.
 - **Green**: the typecheck and the full test suite pass locally, the branch is pushed, and CI passes on it.
-- **Footprint**: what this skill writes to the tracker: only a ticket the Engineer asked for in feedback. Summaries, remarks and answers live on the MR.
+- **Footprint**: what this skill writes to the tracker: a ticket the Engineer asked for in feedback, or updates aligning an existing ticket with an agreed decision and its repository source. Summaries, remarks and answers live on the MR.
 
 ## Project conventions
 

@@ -16,6 +16,8 @@ List the feature's tickets with their status. For every open one, say so and ask
 
 - **Spec**: `.scratch/<feature>/spec.md`, or the spec the tickets link; the source of "what was done".
 - **Every ticket**: title, comments. Collect each `Отложенные замечания ревью` comment, every finding of it, and every note of scope dropped or deferred.
+- **Decisions**: follow the tracker's decision-record rule; read the repository documents linked by the tickets and summarize their meaning with source links under `Что сделано`.
+- **Manual business checks**: collect the commits' `Product review:` paragraphs as conditions, actions and expected results, without assigning executors; follow the tracker's wording rule.
 - **Ticket review**: the `Finishing a ticket` rule of the tracker section says whether tickets closed after the Engineer's review or after the agent's own.
 - **History**: `git log <dev>..HEAD --oneline` and `git diff <dev>...HEAD --stat`.
 - **Shortcuts**: the `shortcut:` comments the feature added, from the added lines of `git diff <dev>...HEAD`; each goes under "Что сознательно не сделано" with its limit and upgrade trigger.
@@ -44,12 +46,18 @@ In chat: the MR link and one line with the ticket count and the deferred finding
 Тикеты:
 - <KEY>: <title>
 
+Решения: <links to versioned repository documents, with short meanings>
+
 Ревью кода: <"каждый тикет закрыт после вашего ревью" | "по правилам проекта код не ревьюился человеком">
 
 ## Где смотреть
 
 - Review-окружение: <url, or "нет">
 - Локально: `<run command>` из ветки `<feature branch>`
+
+## Ручная проверка бизнес-сценариев
+
+- <KEY>: <conditions>; <actions>; ожидается: <result>
 
 ## Что сознательно не сделано
 
