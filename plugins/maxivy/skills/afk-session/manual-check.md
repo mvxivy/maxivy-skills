@@ -13,6 +13,8 @@ The repos involved: the ticket's own repo and the paired one its text names (a f
 
 ## 2. The scenario
 
+Write conditions, actions and expected results in plain language, without assigning an executor or inventing process roles. Keep the observed result separate from the expected one.
+
 Drive the scenario the criterion describes through the browser tools (Playwright MCP): sign in the way the README or `.env.example` offers for local runs (a test user, a fixed OTP), walk every step the criterion names, and check what it says should happen. A failure mode the criterion names (a 502, a dropped connection) is produced by stopping or blocking the backend the scenario talks to.
 
 Take a screenshot at each check point into `.git/afk/screens/<ticket key>-<n>.png`.

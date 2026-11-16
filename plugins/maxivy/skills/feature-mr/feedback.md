@@ -26,7 +26,7 @@ Present the numbered list, each remark with its outcome and a one-line plan, and
 
 On the feature branch, for each fix:
 
-1. Write a test that goes red on the remark, then make it green (`/tdd`). Remarks with no observable behaviour (naming, structure, wording in code) go straight to the change.
+1. Record any agreed decision as the tracker's decision-record rule says and align the ticket before review. Write a test that goes red on the remark, then make it green (`/tdd`). Remarks with no observable behaviour (naming, structure, wording in code) go straight to the change.
 2. Commit, one commit per remark, referencing the ticket the remark belongs to when there is one.
 
 Then make the branch green.
