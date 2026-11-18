@@ -1,15 +1,15 @@
 ---
 name: afk-session
-description: "Builds a feature's open tickets one after another while the Engineer is away: the /implement flow ticket by ticket, every question decided and recorded in repository docs with a ticket link instead of asked, manual checks run against the local backend and frontend, and the feature MR opened at the end with an «AFK: проверить» block listing what to re-check."
-argument-hint: "<feature: Story key or feature branch> [skip <ticket keys>] [astra]"
+description: "Prepares the selected repositories together, then builds their ready tickets while the Engineer is away: the /implement flow ticket by ticket, every question decided and recorded in repository docs with a ticket link instead of asked, manual checks run against the local backend and frontend, and the feature MR opened at the end with an «AFK: проверить» block listing what to re-check."
+argument-hint: "<Story, feature branch, or explicit ticket set> [skip <ticket keys>] [astra]"
 disable-model-invocation: true
 ---
 
 # AFK session
 
-The Engineer launched this and walked away. Build every open ticket of one feature on its feature branch, in the order its `Blocks` links allow, and leave a feature MR they can review in one sitting. The Engineer is AFK: each question you would have asked becomes a decision you take, apply and record in versioned repository documentation, with a link and short meaning in its ticket. What they should re-check goes to the **ledger**, which becomes the «AFK: проверить» block of the MR.
+Prepare the whole requested scope before announcing unattended execution. Build its ready tickets on their feature branches in `Blocks` order and leave one feature MR per repository. An explicit ticket set or roadmap stage limits the session to that set; it does not select every open sibling ticket. The Engineer is AFK: each question you would have asked becomes a decision you take, apply and record in versioned repository documentation, with a link and short meaning in its ticket. What they should re-check goes to the **ledger**, which becomes the «AFK: проверить» block of the MR.
 
-You are the orchestrator. Each ticket is built by subagents with a clean context, so your own window holds only the ledger and short reports. Pass each subagent the current fetched ticket/spec and the verified runtime setup (database, test command, permission constraints); it need not repeat unchanged access probes or refetch the same evidence. With `astra` in the argument, the test, implementer and fix subagents are Astra runs: each one goes as [astra.md](astra.md) says.
+Use one orchestrator for the entire session, including multi-repository work. Delegate bounded test, implementation, review and manual-check tasks with clean contexts; do not add a per-repository orchestration layer. Reserve the slots needed by the review skill before starting it. Give each worker the fetched ticket/spec, repository/remote scope, pinned base, verified runtime and permission evidence, and owned resource state paths. Reuse that evidence until a relevant HEAD, runtime or permission context changes. Only the orchestrator owns branch switches, tracker state and the ledger; workers follow their assigned commit scope. With `astra` in the argument, the test, implementer and fix subagents are Astra runs: each one goes as [astra.md](astra.md) says.
 
 ## Project conventions
 
@@ -21,16 +21,13 @@ Read before starting, and follow them as written except where this file override
 
 A project without the `## Feature MR` section has no feature to run: tell the Engineer and stop.
 
-## 1. Preflight, while the Engineer may still be at the keyboard
+## 1. Prepare the whole session
 
-This is the only step that may stop the session.
+Read [preflight.md](preflight.md) and complete it once for all selected repositories before starting ticket implementation. Preparation gathers missing scope/branch approvals in one concrete request, verifies required checks on the final HEAD, and exercises runtime access and cleanup in the actual worker context. A request already authorized by the user is not asked again.
 
-1. Resolve the feature from the argument: its Story, its feature branch, its tickets that are not `Done`, minus the ones the Engineer named to skip. Order them by `Blocks` links: the **frontier** is every ticket whose blockers are done or built in this session.
-2. Check out the feature branch (create it from the dev branch and push it when it does not exist), pull, and run the repo's check and test commands from its README. Start what they need (a test database container, for instance).
-3. Check tracker access with one ticket fetch. With `astra`: `codex login status` reports a login.
-4. Create the ledger at `.git/afk/<feature branch with / replaced by ->.md` from the template in step 4. When it already exists, this is a resumed session: continue from the tickets it does not mark done or skipped.
+The readiness gate is `python3 <skill>/scripts/preflight.py <manifest.json>`. It checks the recorded evidence and current Git identity; it does not grant permission or prove a host policy by itself. Save its output with the session ledger. Announce unattended execution only after the gate passes. If every ticket is blocked, return the complete blocker report instead of starting workers.
 
-Use the repo’s documented blocking/advisory classification. A pre-existing lint/knip failure explicitly marked non-blocking by the repo or accepted by the Engineer is baseline: log it, continue without another approval, and add no new findings in changed files. A failed blocking check, unavailable tracker, or missing test database stops preflight. Otherwise print the ordered ticket list, say the session runs to the end without questions, and start. Runtime permission prompts are handled by the host’s configured approval policy; this skill does not grant sandbox access.
+After readiness, ordinary implementation choices are recorded decisions. An unexpected human-only dependency blocks that ticket and its dependents; continue independent tickets within the prepared scope. New host denials are not approval: preserve work, follow the host's required denial/escalation handling, and do not promise uninterrupted execution beyond the verified context.
 
 ## 2. Each ticket
 
@@ -53,14 +50,18 @@ The ticket gets two implementer attempts. When the tests are still red, or the t
 
 ## 3. The feature MR
 
-When the frontier is empty:
+When the frontier is empty, stop the resources owned by this session and verify cleanup before the final report, including on interruption or failure. Keep the ledger current before each handoff.
+
+For each repository with completed work:
 
 1. Run the full test suite once more on the feature branch.
 2. Run `/maxivy:feature-mr open <feature branch>`. Its questions have AFK answers: open the MR with the tickets that are not done (the ledger says why); when the branch is red, open it as a draft and log what is red.
 3. Append the ledger to the MR description as the «AFK: проверить» block (`glab mr update <id> --description …` or `gh pr edit <id> --body …`), after «Отложенные замечания ревью». Link the session's decision documents in «Что сделано»; a short explanation of their meaning is allowed. The repository documents hold the decisions and their reasons.
 4. Report in chat: the MR link, tickets done, not done, skipped, and the count of ledger lines.
 
-Push only the feature branch and `afk/*` branches; every merge and every long-lived branch stay the Engineer's, as `### Branches` says.
+If preparation excluded every ticket or the feature has no diff, report that explicitly without opening an empty MR.
+
+Push only the feature branch and `afk/*` branches during unattended execution; every merge and every long-lived branch stay the Engineer's, as `### Branches` says.
 
 ## 4. The ledger
 
