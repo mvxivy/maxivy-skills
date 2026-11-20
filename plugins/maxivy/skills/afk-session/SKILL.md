@@ -11,6 +11,8 @@ Prepare the whole requested scope before announcing unattended execution. Build 
 
 Use one orchestrator for the entire session, including multi-repository work. Delegate bounded test, implementation, review and manual-check tasks with clean contexts; do not add a per-repository orchestration layer. Reserve the slots needed by the review skill before starting it. Give each worker the fetched ticket/spec, repository/remote scope, pinned base, verified runtime and permission evidence, and owned resource state paths. Reuse that evidence until a relevant HEAD, runtime or permission context changes. Only the orchestrator owns branch switches, tracker state and the ledger; workers follow their assigned commit scope. With `astra` in the argument, the test, implementer and fix subagents are Astra runs: each one goes as [astra.md](astra.md) says.
 
+On a context-compaction hook, an explicit low-context warning, or a requested session transfer, follow [context-handoff](../context-handoff/SKILL.md) to checkpoint the session and print its continuation prompt.
+
 ## Project conventions
 
 Read before starting, and follow them as written except where this file overrides them:

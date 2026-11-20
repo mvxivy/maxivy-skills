@@ -25,6 +25,19 @@ The plugin has no `version` in `plugin.json`, so an install is pinned to a commi
 | `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.local.md`; asks whether commit scopes carry the ticket key (`feat(PROJ-123): …`) and whether the project uses the branch flow (feature branches and MRs) and, if so, records its dev/stage/prod branches; adds the `Seams` section (test seams, heading always in English) to the tickets convention in `docs/agents/issue-tracker.md` |
 | `/maxivy:feature-mr` | The feature MR: `setup` writes the convention into `docs/agents/issue-tracker.md`, `open` opens the MR of a feature branch into the dev branch with a summary and the deferred review findings, `feedback` works through the review threads on it, `help` prints the project's cheat sheet |
 | `/maxivy:afk-session` | Prepares all selected repositories together, then builds ready tickets while you are away: the `/implement` flow per ticket in clean-context subagents, ambiguities decided by the test's reading and recorded in repository docs, manual checks run in the browser against the local backend and frontend; ends with `/maxivy:feature-mr open` and an «AFK: проверить» block in the MR listing check results, remaining checks, skipped tickets and links to decisions |
+| `/maxivy:context-handoff` | Saves a temp handoff using the installed `mattpocock-skills:handoff` instructions and prints a continuation prompt; also reached automatically after compaction, with or without AFK |
+
+## Context handoff
+
+The bundled `SessionStart` hook matches `compact` in local Claude Code and Codex hosts that support plugin command hooks. It asks the agent to save a handoff and print a ready-to-paste prompt before resuming work. AFK checkpoints include the ledger, frontier, in-flight ticket, approvals and runtime ownership; AFK execution continues. Before moving to another chat, ask the old orchestrator to pause and refresh the handoff so two sessions do not work on the same state.
+
+This happens **after compaction**, including manual `/compact`, not at a guessed percentage of remaining tokens. The agent uses the compaction summary and searches the original transcript for missing facts when the host makes it available. For a checkpoint before compaction, invoke `/maxivy:context-handoff` yourself. Missing upstream handoff instructions produce an explicitly labelled fallback. Temp files can be removed by OS cleanup and are not shared with another machine.
+
+Requires Python 3. Update the installed plugin and restart the host to load the new hook. In local Codex, review the bundled hook through `/hooks` (CLI) or Settings > Hooks (desktop); installing skills alone does not activate hooks. Cloud-orchestrated Work sessions do not load local command hooks: use the skill manually there. This repository change does not update installed plugins, trust hooks or change global settings.
+
+The hook only emits a skill pointer and session metadata; it does not read or copy transcripts, write handoffs itself, start another model, or change permissions. Saving the document remains agent work subject to the session's permissions. A hook failure or unavailable model continuation can leave the checkpoint unwritten.
+
+Hook contracts: [Claude Code SessionStart](https://code.claude.com/docs/en/hooks#sessionstart), [Codex hooks](https://learn.chatgpt.com/docs/hooks#sessionstart). Local check: `python3 -m unittest discover -s plugins/maxivy/hooks/tests -v`.
 
 ## Feature MR workflow
 
