@@ -1,6 +1,6 @@
 # Astra as the builder
 
-The session runs with `astra`: the test, implementer and fix subagents of steps 2.3, 2.5 and 2.7 are Astra runs (OpenAI `gpt-6-astra` through Codex) instead of Claude subagents. Seams, every decision and ADR, the ledger, `/code-review`, manual checks, the tracker and the MR stay yours.
+The session runs with `astra`: the test, implementer and fix subagents of steps 2.3, 2.5 and 2.7 are Astra runs (OpenAI `gpt-6-astra` through Codex) instead of the host's native subagents. Seams, every decision and ADR, the ledger, `/code-review`, manual checks, the tracker and the MR stay yours.
 
 ## The sandbox is the guard
 
@@ -22,14 +22,14 @@ Done with a run when its change is committed or reverted and the report's conten
 
 ## The brief
 
-Astra reads the repo's `AGENTS.md` and nothing of the Claude harness: `CLAUDE.md`, `CLAUDE.local.md`, the tracker and this skill are invisible to it unless the brief names them. Each run starts with an empty context, so the brief is everything it knows.
+Each Astra run starts with a fresh task context and the Codex instructions available to that run. Name `AGENTS.md`, `AGENTS.local.md` and the required tracker or skill documents explicitly in the brief; the parent session's context is not inherited.
 
 ```markdown
 Role: <tests | code | fix>. Repo: <path>, branch <feature branch>.
 
 ## Read first
 - docs/agents/implement.md, step <2 for tests | 4–5 for code and fix>
-- CLAUDE.md, then CLAUDE.local.md if present, plus applicable subdirectory rules: code conventions and commit rules
+- AGENTS.md, then AGENTS.local.md if present, plus applicable subdirectory rules: code conventions and commit rules
 
 ## Ticket <KEY>
 <the ticket text, verbatim>

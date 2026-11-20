@@ -31,7 +31,7 @@ Print the saved file's absolute path and a ready-to-paste prompt in the user's l
 
 ```text
 Продолжи задачу «<objective>» в <project paths>. Прочитай handoff <absolute path>,
-затем CLAUDE.md и CLAUDE.local.md в каждом проекте и применимые AGENTS.md.
+затем AGENTS.md и AGENTS.local.md в каждом проекте и применимых подкаталогах.
 Сверь текущие branch/HEAD, незакоммиченные изменения и состояние workers/runtime
 с handoff. Перед изменениями убедись, что предыдущий orchestrator остановлен
 или передал ownership. Продолжи с <next action>, сохрани scope и ограничения approval.

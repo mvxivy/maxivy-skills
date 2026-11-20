@@ -17,7 +17,7 @@ On a context-compaction hook, an explicit low-context warning, or a requested se
 
 Read before starting, and follow them as written except where this file overrides them:
 
-- `CLAUDE.md`, then `CLAUDE.local.md`, plus applicable subdirectory rules: `### Branches` names the dev branch and the push rules; local instructions take precedence.
+- `AGENTS.md`, then `AGENTS.local.md`, plus applicable subdirectory rules: `### Branches` names the dev branch and the push rules; local instructions take precedence.
 - `docs/agents/implement.md`: the ticket flow (seams, tests from a clean subagent, code, commit, review).
 - `docs/agents/issue-tracker.md`: every tracker operation, the `## Feature MR` section (feature branch, finishing a ticket, review status, decision records). Read `docs/agents/domain.md` when recording a decision.
 

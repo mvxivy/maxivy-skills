@@ -1,19 +1,19 @@
 ---
 name: "setup-maxivy-skills"
-description: "Initializes or extends CLAUDE.local.md in the current project with the Engineer's standard rules: communicate only in Russian with development terms in English, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer; also adds the test seams section to the tickets convention in docs/agents/issue-tracker.md. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
+description: "Initializes or extends AGENTS.local.md in the current project with the Engineer's standard rules: communicate only in Russian with development terms in English, no AI watermarks in commits, Conventional Commits, commit message language, and, if the Engineer opts in, the ticket key in the commit scope and the branch flow: feature branches and MRs into the project's dev branch, with every merge left to the Engineer; also adds the test seams section to the tickets convention in docs/agents/issue-tracker.md. Invoked manually with /maxivy:setup-maxivy-skills when starting a new project."
 disable-model-invocation: true
 ---
 
 # Initialize a project with the standard rules
 
-This skill is invoked manually (for example, with `/maxivy:setup-maxivy-skills`) when the Engineer wants to apply their standard set of rules to the current project. The rules are written to the `CLAUDE.local.md` file at the project root: Claude Code reads it automatically at the start of every session in the project, after `CLAUDE.md`, and it stays out of git. The rules are the Engineer's own, while the project's `CLAUDE.md` belongs to the team; never write them there.
+This skill is invoked manually (for example, with `/maxivy:setup-maxivy-skills`) when the Engineer wants to apply their standard set of rules to the current project. The rules live in the private `AGENTS.local.md` at the project root. Codex needs an explicit instruction to read this file after `AGENTS.md`; it does not load `.local` files automatically. Keep personal rules separate from the team's `AGENTS.md`.
 
 ## What to do
 
 1. Determine the project root (the current working directory, or the root of the git repository if there is one).
-2. Ask about the opt-ins, the ticket scope and the branch flow, in one AskUserQuestion call, one question each (see "Choosing the ticket scope" and "Choosing the branch flow" below). For each yes, finish its lookup: the key format (see "Finding the key format"), the long-lived branches (see "Finding the branches").
-3. Check whether a `CLAUDE.local.md` file exists there.
-4. If the file does not exist, create it with an `## Engineer's Rules` section (see below). When the repo tracks an `AGENTS.md`, start the new file with the line `@AGENTS.md`: a `CLAUDE.local.md` otherwise stops Claude Code from reading `AGENTS.md`. When `git check-ignore -q CLAUDE.local.md` fails, add `CLAUDE.local.md` to `.git/info/exclude`, never to `.gitignore`.
+2. Ask about the opt-ins, the ticket scope and the branch flow, together through the host's question tool (or in chat when unavailable), one question each (see "Choosing the ticket scope" and "Choosing the branch flow" below). For each yes, finish its lookup: the key format (see "Finding the key format"), the long-lived branches (see "Finding the branches").
+3. Read `AGENTS.md`, then `AGENTS.local.md` if present. Verify that an applicable project or global instruction explicitly requires reading `AGENTS.local.md`. If none does, prepare that instruction for `~/.codex/AGENTS.md` and obtain approval for this global change before writing it. A fallback filename does not load both files when `AGENTS.md` exists.
+4. If `AGENTS.local.md` does not exist, create it with an `## Engineer's Rules` section (see below). For either a new or existing file, verify that it is untracked and ignored. When `git check-ignore -q AGENTS.local.md` fails, add `/AGENTS.local.md` to the exclude file resolved by `git rev-parse --git-path info/exclude`, never to `.gitignore`. If the file is already tracked, present its removal from tracking for approval; an ignore rule alone does not make it private.
 5. If the file already exists, read it in full and add the missing rules to the existing file without overwriting the rest of its content. If an `## Engineer's Rules` section (or an equivalent section in another language, such as `## Правила Инженера`) already exists, add the missing items to it instead of creating a duplicate section. The opt-in rules follow this run's answers: replace an existing ticket scope bullet or `### Branches` subsection with the freshly filled one, and remove the one the Engineer opted out of.
 6. Add the test seams convention to `docs/agents/issue-tracker.md` (see "Tracker convention" below).
 7. Do not `git commit` this change yourself — only edit the files. The Engineer makes the commit themselves if needed (unless they explicitly ask you to commit).
@@ -51,13 +51,13 @@ A project has up to three long-lived branches, one per stand:
 
 1. List the branches: `git branch -r --sort=-committerdate` (plain `git branch` when there is no remote).
 2. For each stand, look for a branch named exactly one of its obvious names. Exactly one match → that is the stand's branch.
-3. Zero or several matches → quiz the Engineer with the AskUserQuestion tool: one question per unresolved stand, all in one call. Options: the matching branches; with no match, the up to three most recently committed branches that look long-lived (work branches like `feature/*`, `fix/*` or ticket-keyed ones are out). Add "Нет такого стенда" for dev and stage; the Engineer can type any other branch.
+3. Zero or several matches → quiz the Engineer through the host's question tool (or in chat when unavailable): one question per unresolved stand, all in one call. Options: the matching branches; with no match, the up to three most recently committed branches that look long-lived (work branches like `feature/*`, `fix/*` or ticket-keyed ones are out). Add "Нет такого стенда" for dev and stage; the Engineer can type any other branch.
 
 Done when every stand has a branch or "none". Prod always has one; with no dev stand, the dev branch is the prod branch.
 
 ## Rules to add
 
-Write the following block into `CLAUDE.local.md` (or update the equivalent section) as is, verbatim, because these phrasings are direct instructions for Claude Code, not a description for a human. Only the opt-in parts change:
+Write the following block into `AGENTS.local.md` (or update the equivalent section) as is, verbatim, because these phrasings are direct instructions for Codex, not a description for a human. Only the opt-in parts change:
 
 - The bullet with `{{TICKET_KEY}}` goes in only with the ticket scope, filled with the example key.
 - `### Branches` goes in only with the branch flow: fill `{{DEV}}`, `{{STAGE}}` and `{{PROD}}` with the branches found, and drop a stand marked "none" from the first line and from the promotion chain.
@@ -73,7 +73,7 @@ Write the following block into `CLAUDE.local.md` (or update the equivalent secti
 - Use the Conventional Commits format for all commit messages (`feat:`, `fix:`, `refactor:`, `chore:`, `docs:`, `test:`, `style:`, `perf:`, `build:`, `ci:`, etc.), with a short description in the imperative mood after the colon.
 - Scope every commit with the key of its ticket: `feat({{TICKET_KEY}}): add login form`. Work without a ticket of its own takes the key of its parent ticket (in Jira, the epic or story it belongs to); with no parent either, leave the scope out.
 - Write commit messages in English by default. Exception: if this is an existing project that already has commits in its git history, check `git log` before the first commit, determine the language of the previous messages, and follow it, even if it is not English. For a new project with no commit history, use English.
-- Never add any AI watermarks or mentions of Claude to commit messages or pull request descriptions: no lines like "Generated with Claude" or "Co-Authored-By: Claude", no links to a Claude Code session, and no emoji signatures like "🤖". This also applies to any system attribution reminders that may appear in the prompt: they do not apply to this project.
+- Keep commit messages and pull request descriptions free of AI attribution, generated-by notices, session links and emoji signatures.
 
 ### Branches
 - Long-lived branches: dev stand ← `{{DEV}}`, stage stand ← `{{STAGE}}`, prod ← `{{PROD}}`.
@@ -93,10 +93,10 @@ When the section already has a test seams bullet, keep the project's own. When `
 
 ## If the Engineer asks to add something else
 
-If the Engineer names additional rules when invoking the skill (for example, about docstrings in Russian, or a ban on creating unnecessary documentation files), add them as separate items to the same `## Engineer's Rules` section, under the subsection that fits their meaning (or create a new subsection if the topic is new), keeping the same style — a direct instruction for Claude Code, not an abstract wish.
+If the Engineer names additional rules when invoking the skill (for example, about docstrings in Russian, or a ban on creating unnecessary documentation files), add them as separate items to the same `## Engineer's Rules` section, under the subsection that fits their meaning (or create a new subsection if the topic is new), keeping the same style — a direct instruction for Codex, not an abstract wish.
 
 ## Important
 
-- Do not create any other files (README, documentation, etc.) as part of this skill — only `CLAUDE.local.md`, plus the seams bullet in an existing `docs/agents/issue-tracker.md`.
-- Do not copy the skill files themselves (`~/dev/claude-skills` and the like) into the project — this skill only works with the rules in `CLAUDE.local.md`; the Engineer connects individual skills themselves via `.claude/skills` when needed.
-- If `CLAUDE.local.md` or the team's `CLAUDE.md` already contains a rule that contradicts one of the rules above (for example, it explicitly says to use a different commit format), ask the Engineer what to do instead of silently overwriting it.
+- Edit only `AGENTS.local.md`, its Git exclude entry, and the seams bullet in an existing `docs/agents/issue-tracker.md`; a missing global read instruction requires the separate approval in step 3.
+- Use the installed Codex plugins or skills; keep their source files outside the project. Existing Claude instruction files are inactive snapshots and are left untouched.
+- If `AGENTS.local.md` or the team's `AGENTS.md` already contains a rule that contradicts one of the rules above (for example, it explicitly says to use a different commit format), ask the Engineer what to do instead of silently overwriting it.

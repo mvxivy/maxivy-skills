@@ -1,35 +1,36 @@
 # maxivy-skills
 
-A personal Claude Code plugin marketplace with the `maxivy` plugin.
+A personal Codex plugin marketplace with the `maxivy` plugin.
 
 ## Installation
 
 ```shell
-/plugin marketplace add mvxivy/maxivy-skills
-/plugin install maxivy@maxivy-skills
+codex plugin marketplace add mvxivy/maxivy-skills
+codex plugin add maxivy@maxivy-skills
 ```
 
-To pick up newly pushed commits, refresh the marketplace, update the plugin, then restart Claude Code:
+For a local checkout, use `codex plugin marketplace add /absolute/path/to/maxivy-skills` instead of the Git source. The installed plugin is a cached copy, not a symlink.
 
-```shell
-/plugin marketplace update maxivy-skills
-/plugin update maxivy@maxivy-skills
-```
+After pulling or editing a local source, refresh the installed copy with `codex plugin add maxivy@maxivy-skills`. For a Git marketplace, first run `codex plugin marketplace upgrade maxivy-skills`. Start a new Codex session to load the updated skills; verify the installation with `codex plugin list --marketplace maxivy-skills --json`.
 
-The plugin has no `version` in `plugin.json`, so an install is pinned to a commit: a marketplace update alone, or a reinstall, keeps the old commit.
+## Project instructions
+
+Use `AGENTS.md` for project instructions and `AGENTS.local.md` for private rules. Codex automatically discovers `AGENTS.md`; an applicable project or global instruction must explicitly require reading `AGENTS.local.md` afterwards. `AGENTS.override.md` replaces the sibling `AGENTS.md`, and fallback filenames do not combine both files. The setup skill checks this read instruction and keeps the private file out of Git.
+
+Retained Claude instruction files are inactive snapshots. Plugin packaging names such as `.claude-plugin` and `CLAUDE_PLUGIN_ROOT` remain host compatibility contracts.
 
 ## Skills
 
 | Command | What it does |
 | --- | --- |
-| `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `CLAUDE.local.md`; asks whether commit scopes carry the ticket key (`feat(PROJ-123): …`) and whether the project uses the branch flow (feature branches and MRs) and, if so, records its dev/stage/prod branches; adds the `Seams` section (test seams, heading always in English) to the tickets convention in `docs/agents/issue-tracker.md` |
+| `/maxivy:setup-maxivy-skills` | Adds the Engineer's standard rules to the project's `AGENTS.local.md`; asks whether commit scopes carry the ticket key (`feat(PROJ-123): …`) and whether the project uses the branch flow (feature branches and MRs) and, if so, records its dev/stage/prod branches; adds the `Seams` section (test seams, heading always in English) to the tickets convention in `docs/agents/issue-tracker.md` |
 | `/maxivy:feature-mr` | The feature MR: `setup` writes the convention into `docs/agents/issue-tracker.md`, `open` opens the MR of a feature branch into the dev branch with a summary and the deferred review findings, `feedback` works through the review threads on it, `help` prints the project's cheat sheet |
 | `/maxivy:afk-session` | Checks spec/ticket consistency and prepares all selected repositories, then builds ready tickets while you are away: source-backed decisions recorded in repository docs, unresolved product questions block affected tickets, manual checks run against the local backend and frontend; ends with `/maxivy:feature-mr open` and an «AFK: проверить» block listing results, remaining checks, skipped tickets and decisions |
 | `/maxivy:context-handoff` | Saves a temp handoff using the installed `mattpocock-skills:handoff` instructions and prints a continuation prompt; also reached automatically after compaction, with or without AFK |
 
 ## Context handoff
 
-The bundled `SessionStart` hook matches `compact` in local Claude Code and Codex hosts that support plugin command hooks. It asks the agent to save a handoff and print a ready-to-paste prompt before resuming work. AFK checkpoints include the ledger, frontier, in-flight ticket, approvals and runtime ownership; AFK execution continues. Before moving to another chat, ask the old orchestrator to pause and refresh the handoff so two sessions do not work on the same state.
+The bundled `SessionStart` hook matches `compact` in local Codex hosts that support plugin command hooks. It asks the agent to save a handoff and print a ready-to-paste prompt before resuming work. AFK checkpoints include the ledger, frontier, in-flight ticket, approvals and runtime ownership; AFK execution continues. Before moving to another chat, ask the old orchestrator to pause and refresh the handoff so two sessions do not work on the same state.
 
 This happens **after compaction**, including manual `/compact`, not at a guessed percentage of remaining tokens. The agent uses the compaction summary and searches the original transcript for missing facts when the host makes it available. For a checkpoint before compaction, invoke `/maxivy:context-handoff` yourself. Missing upstream handoff instructions produce an explicitly labelled fallback. Temp files can be removed by OS cleanup and are not shared with another machine.
 
@@ -41,15 +42,15 @@ Hook contracts: [Claude Code SessionStart](https://code.claude.com/docs/en/hooks
 
 ## Feature MR workflow
 
-A feature is the set of tickets `/to-tickets` publishes from one spec; it may carry no business value of its own and is as many tickets as you find convenient. Its tickets commit to one feature branch and reach the dev branch through one MR, which you merge. The merge is the only gate: each ticket is checked against its own acceptance criteria after `/implement` (by you or by the agent alone, as the project chose), with no additional feature-wide acceptance step at MR time. The process lives in two project files, `CLAUDE.local.md` (or `CLAUDE.md`) and `docs/agents/issue-tracker.md`, which Matt Pocock's skills already read, so `/to-tickets` and `/implement` follow it without changes to those skills.
+A feature is the set of tickets `/to-tickets` publishes from one spec; it may carry no business value of its own and is as many tickets as you find convenient. Its tickets commit to one feature branch and reach the dev branch through one MR, which you merge. The merge is the only gate: each ticket is checked against its own acceptance criteria after `/implement` (by you or by the agent alone, as the project chose), with no additional feature-wide acceptance step at MR time. The process lives in two project files, `AGENTS.local.md` (or `AGENTS.md`) and `docs/agents/issue-tracker.md`, which the orchestrator reads before `/to-tickets` and `/implement` and includes in worker briefs. Personal harness blocks belong in `AGENTS.local.md` even when an upstream skill still suggests another filename.
 
 ### Once per project
 
 1. `/setup-matt-pocock-skills`, if not done yet: creates `docs/agents/issue-tracker.md` (where tickets live and how to work with them).
-2. `/maxivy:setup-maxivy-skills`, answering yes to the branch flow: it finds the dev, stage and prod branches (or asks about them in a quiz) and writes the `### Branches` rule into `CLAUDE.local.md`: feature branches are cut from the dev branch, their MRs target it, and only the Engineer merges. Simple projects answer no and skip the flow altogether.
+2. `/maxivy:setup-maxivy-skills`, answering yes to the branch flow: it finds the dev, stage and prod branches (or asks about them in a quiz) and writes the `### Branches` rule into `AGENTS.local.md`: feature branches are cut from the dev branch, their MRs target it, and only the Engineer merges. Simple projects answer no and skip the flow altogether.
 3. `/maxivy:feature-mr setup`, the explicit opt-in (the flow stays off in a project until you run it). It asks one question: is the project a core domain for you (every ticket passes your code review before it closes) or a supporting or generic one (tickets close after the agent's own review, the merge is the only human gate)? Then it adds a `## Feature MR` section to `docs/agents/issue-tracker.md` with the feature branch format (e.g. `feature/user-login`), the ticket review rule and, for a core project, the review status (for Jira, read from your workflow). It shows a draft first, creates a missing label on the tracker only after you confirm, and ends by printing a cheat sheet with this project's real branches, statuses and example commands. `/maxivy:feature-mr help` prints it again at any time, rebuilt from the current configuration.
 
-The skills leave these files uncommitted: commit `docs/agents/issue-tracker.md` yourself if the project tracks it; `CLAUDE.local.md` stays out of git.
+The skills leave these files uncommitted: commit `docs/agents/issue-tracker.md` yourself if the project tracks it; `AGENTS.local.md` stays out of git.
 
 ### Per feature
 
@@ -65,7 +66,7 @@ The skills leave these files uncommitted: commit `docs/agents/issue-tracker.md` 
 6. `/maxivy:feature-mr feedback`: the agent collects open threads and shows a numbered list for you to approve. Every remark is a fix by default, each with a test and its own commit; a question gets a reply. A remark that looks like a separate increment is only flagged as such: it becomes a ticket, or a change to the spec, solely on your word. The agent replies in every thread with a commit, a ticket link or an answer; you resolve the threads.
 7. **Done:** merge into the dev branch and check the feature on the dev stand. A defect found after the merge is a bug ticket. Promotion dev → stage → prod is yours too.
 
-**AFK variant.** Preparation first checks every selected repository together: branch sync and authorization, baseline on the final HEAD, worker permissions, manual prerequisites and runtime cleanup. It batches missing preparation approvals before announcing readiness. Narrow local harness repairs preserve assertions and must restore green checks; human-only blockers remain visible and independent ready tickets can proceed. A Python readiness gate checks recorded evidence and current Git identity. Steps 3–4 then run unattended: `/maxivy:afk-session <Story or feature branch>` builds the selected ready tickets in `Blocks` order with one orchestrator and bounded workers, and opens the MR with an «AFK: проверить» block: links to decisions recorded in repository docs, the manual checks with screenshots, the tickets it could not finish (their work sits in `afk/<KEY>-wip`). Keep the machine awake (`caffeinate -i`) and the session open. Host permissions remain separate: preparation must verify the actual parent/worker context; Auto-review can review eligible runtime requests but can still deny an action. The runtime supervisor records its state before launch returns and supports cleanup after interruption. See the skill’s `preflight.md` and `manual-check.md`. Add `astra` to the argument to have OpenAI's `gpt-6-astra` (through the Codex CLI, logged in) write the tests, the code and the review fixes while Claude keeps the decisions, the review and every git operation: Astra's sandbox has `.git` read-only and no network, so it cannot commit or push.
+**AFK variant.** Preparation first checks every selected repository together: branch sync and authorization, baseline on the final HEAD, worker permissions, manual prerequisites and runtime cleanup. It batches missing preparation approvals before announcing readiness. Narrow local harness repairs preserve assertions and must restore green checks; human-only blockers remain visible and independent ready tickets can proceed. A Python readiness gate checks recorded evidence and current Git identity. Steps 3–4 then run unattended: `/maxivy:afk-session <Story or feature branch>` builds the selected ready tickets in `Blocks` order with one orchestrator and bounded workers, and opens the MR with an «AFK: проверить» block: links to decisions recorded in repository docs, the manual checks with screenshots, the tickets it could not finish (their work sits in `afk/<KEY>-wip`). Keep the machine awake (`caffeinate -i`) and the session open. Host permissions remain separate: preparation must verify the actual parent/worker context; Auto-review can review eligible runtime requests but can still deny an action. The runtime supervisor records its state before launch returns and supports cleanup after interruption. See the skill’s `preflight.md` and `manual-check.md`. Add `astra` to the argument to have OpenAI's `gpt-6-astra` (through the Codex CLI, logged in) write the tests, the code and the review fixes while the orchestrator keeps the decisions, the review and every git operation: Astra's sandbox has `.git` read-only and no network, so it cannot commit or push.
 
 Before AFK readiness, a bounded read-only subagent checks the agreed spec against the selected tickets for lost rules, conflicting scenarios and dependencies; see [requirements.md](plugins/maxivy/skills/afk-session/requirements.md). The orchestrator restores source-backed omissions within the agreed scope and records coverage and blockers. New product decisions stay with the Engineer: unanswered questions block affected tickets and their dependents while independent work proceeds. Later ambiguities use the same sources; incorrect tests are corrected before implementation continues. This check is part of AFK preparation, with no separate BA/SA skill or changes to the upstream Matt Pocock plugin.
 
@@ -78,5 +79,5 @@ Feature flags are out of this skill's scope: a project that uses them wires them
 ## Adding a new skill
 
 1. Create `plugins/maxivy/skills/<skill-name>/SKILL.md` with `name` and `description` in the frontmatter.
-2. Validate: `claude plugin validate plugins/maxivy`.
+2. Parse both plugin manifests as JSON, check skill frontmatter and relative links, and run the affected Python self-checks (`python3 -m unittest discover -s plugins/maxivy/hooks/tests -v` for hooks).
 3. Commit and push.

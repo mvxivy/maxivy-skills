@@ -2,7 +2,7 @@
 
 ## Inventory before mutation
 
-Read CLAUDE.md, then CLAUDE.local.md and applicable subdirectory rules. Resolve the requested tickets, blockers, repositories, remotes, feature branches, hooks and paired runtimes. Read-only access elsewhere does not add it to scope. List the exact effects before asking for any missing cross-project or configuration approval; existing authorization remains valid.
+Read AGENTS.md, then AGENTS.local.md and applicable subdirectory rules. Resolve the requested tickets, blockers, repositories, remotes, feature branches, hooks and paired runtimes. Read-only access elsewhere does not add it to scope. List the exact effects before asking for any missing cross-project or configuration approval; existing authorization remains valid.
 
 Resolve each selected Story/feature branch through the project tracker convention, fetch its tickets once, exclude Done and explicitly skipped tickets, and order the frontier by Blocks. For an explicit roadmap stage, keep only its named tickets. Create each ledger at `.git/afk/<feature branch with / replaced by ->.md`; on resume, verify its recorded commits/check outcomes and continue only unfinished tickets. Fetch the tickets once. For every acceptance criterion, identify the required environment and evidence: unit/integration, local browser, or live access. Check credentials by using the documented helper without exposing secrets. A missing live route export/access, interactive password setup, or unavailable production fixture is a ticket blocker now, not a surprise after implementation. Record blocked tickets and dependent skips; independent tickets remain candidates.
 

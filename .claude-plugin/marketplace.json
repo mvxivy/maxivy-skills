@@ -4,13 +4,13 @@
     "name": "Maksim Ivanov"
   },
   "metadata": {
-    "description": "Personal Claude Code plugin marketplace of Maksim Ivanov"
+    "description": "Personal Codex plugin marketplace of Maksim Ivanov"
   },
   "plugins": [
     {
       "name": "maxivy",
       "source": "./plugins/maxivy",
-      "description": "The Engineer's personal Claude Code skills"
+      "description": "The Engineer's personal Codex skills"
     }
   ]
 }
