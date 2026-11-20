@@ -14,6 +14,10 @@ Discover runtime versions and required check commands from the repository and CI
 
 Repair a pre-existing local test-harness/setup defect within the already authorized project when the required behavior is clear (for example an alias mapping, isolated test environment, or test resource cleanup). Keep assertions and product semantics intact; record the red result and separate repair commit, then rerun the affected checks and the readiness baseline on the final HEAD. Do not silently skip a test, lower a threshold, or label a blocking failure advisory. Product changes, destructive data changes or unresolved semantics are blockers, not harness repair. Two unsuccessful repair attempts stop that repository's preparation; other prepared repositories may proceed once the batch report is complete.
 
+## Check requirements before readiness
+
+Complete [requirements.md](requirements.md) for the selected scope before marking tickets ready. Resolve preparation questions with the Engineer while available; record unanswered product questions as ticket blockers and propagate dependent skips into the manifest. Link the requirements report from each feature ledger, including on handoff. If source-backed clarification commits change a pinned HEAD, refresh that repository's baseline evidence before the readiness gate.
+
 ## Verify capabilities in the execution context
 
 Scope authorization and host permissions are separate. Keep the sandbox and saved allowances unchanged unless the user explicitly approves exact changes. In Codex, inspect the effective approval reviewer as well as approval policy: `on-request` with a human reviewer can interrupt runtime calls. Auto-review can handle eligible requests when selected by the user, but can still deny them; `never` denies requests rather than granting access. Do not solve this with a blanket shell/script allow rule or Full Access.
